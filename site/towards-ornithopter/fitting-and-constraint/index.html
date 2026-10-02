@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fitting and Constraint — Siyuan Shao</title>
+<meta name="description" content="One bearing alone is not enough for fully constraining a gear (see above video). A pair of two bearings gives better constraint, but that also introduces an ali">
+<link rel="canonical" href="https://www.shaosiyuan.com/towards-ornithopter/fitting-and-constraint">
+<meta property="og:site_name" content="Siyuan Shao">
+<meta property="og:title" content="Fitting and Constraint — Siyuan Shao">
+<meta property="og:url" content="https://www.shaosiyuan.com/towards-ornithopter/fitting-and-constraint">
+<meta property="og:type" content="article">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Fitting and Constraint — Siyuan Shao">
+<meta property="og:description" content="One bearing alone is not enough for fully constraining a gear (see above video). A pair of two bearings gives better constraint, but that also introduces an ali">
+<meta name="twitter:description" content="One bearing alone is not enough for fully constraining a gear (see above video). A pair of two bearings gives better constraint, but that also introduces an ali">
+<meta property="og:image" content="https://www.shaosiyuan.com/img/IMG_6276-2-IO21DN.jpg">
+<meta name="twitter:image" content="https://www.shaosiyuan.com/img/IMG_6276-2-IO21DN.jpg">
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Poppins:wght@400&display=swap">
+<link rel="stylesheet" href="../../css/site.css">
+</head>
+<body class="is-post post-towards-ornithopter">
+<header class="site-header header-white">
+  <a class="site-title" href="../../">Siyuan Shao</a>
+  <button class="menu-toggle" aria-label="Open menu" aria-expanded="false"><span></span><span></span></button>
+  <nav class="site-nav">
+    <a href="../../">Home</a>
+    <a href="../../about">About</a>
+    <a href="../../towards-ornithopter" class="active">Towards Ornithopter</a>
+    <a href="../../jumping-vehicle">Jumping Vehicle</a>
+    <a href="../../moments-mechanical">Moments Mechanical</a>
+    <a href="../../course-projects">Course Projects</a>
+    <a href="../../life">Life</a>
+    <a href="../../contact">Contact</a>
+  </nav>
+</header>
+<main>
+<article class="post">
+<div class="post-top">
+  <div class="post-meta"><time class="post-date" datetime="2021-01-19">Jan 19</time></div>
+  <h1 class="post-title">Fitting and Constraint</h1>
+</div>
+<div class="post-body">
+<div class="row">
+      <div class="col span-2 empty"></div>
+      <div class="col span-8">
+        <div class="blk blk-video"><div class="video"><iframe src="https://www.youtube.com/embed/MHZSak-pSHA?rel=0" title="Video" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe></div></div>
+      </div>
+      <div class="col span-2 empty"></div>
+    </div>
+    <div class="row">
+      <div class="col span-2 empty"></div>
+      <div class="col span-8">
+        <div class="blk blk-html"><p>One bearing alone is not enough for fully constraining a gear (see above video). A pair of two bearings gives better constraint, but that also introduces an alignment problem.</p></div>
+        <div class="blk blk-image"><figure style="max-width:1186px"><img src="../../img/Misalignment-5N8475.jpg" alt="Misalignment.jpg" width="1186" height="318" loading="lazy"></figure></div>
+        <div class="blk blk-html"><p>Did you notice any misalignment in the CAD? The carbon fiber sheet (the black piece) constrains the bearing in an inaccurate position. The axes of the two bearings are parallel but off by 5 thou. That 5-thou results in a disastrous gear-meshing problem (see following video).</p></div>
+        <div class="blk blk-video"><div class="video" style="aspect-ratio:100/75"><iframe src="https://www.youtube.com/embed/oe9Y_YVx8_E?rel=0" title="Video" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe></div></div>
+        <div class="blk blk-html"><p>“Off by 5 thou? Just redraw the CAD so that the bearing is constraint with good alignment.”</p><p>Sadly, I cannot do that. In fabrication, I am technically not able to measure how much the alignment is off. Maybe it’s off by 1 thou, maybe 10 thou. I don’t know. So, redrawing the CAD will not solve the problem.</p><p>The carbon fiber sheet over-constrain the bearing with an interference fit. So, I get rid of the over-constraint by removing the interference fit.</p></div>
+        <div class="blk blk-image"><figure style="max-width:767px"><img src="../../img/image-asset-5P2H2W.png" alt="This is a realistic illustration of what I fabricated. The blue surface highlighted the gap between bearing and carbon fiber sheet. Note that the carbon fiber sheet deforms a little, because the pin is pushing it downward while the bearing flange is…" width="767" height="511" loading="lazy"><figcaption><div><p class="small" style="text-align:center">This is a realistic illustration of what I fabricated. The blue surface highlighted the gap between bearing and carbon fiber sheet. Note that the carbon fiber sheet deforms a little, because the pin is pushing it downward while the bearing flange is pushing it upward. The glue is drawn as an orange ring.</p></div></figcaption></figure></div>
+        <div class="blk blk-html"><p>Now, the carbon fiber sheet is in clearance fit with the bearing (see above picture). Once the bearing is placed into the aligned position through an iterative process (see video below), it is fixed in position by both the glue and the clamping force.</p></div>
+        <div class="blk blk-video"><div class="video" style="aspect-ratio:100/75"><iframe src="https://www.youtube.com/embed/VpMtq8tRjx0?rel=0" title="Video" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe></div></div>
+        <div class="blk blk-html"><p>The clamping force is provided by the interference fit of the Acetal dowel pin. I brought oversized pins and sand them down to press fit (see left picture). Also for an interference fit, I have to add ~15 thou of tape between the carbon fiber rod and bearing, which used to had a terrible 10 thou clearance fit.</p></div>
+        <div class="row">
+          <div class="col span-6">
+            <div class="blk blk-image"><figure><img src="../../img/IMG_6206-LPZMVF.jpg" alt="IMG_6206.jpeg" width="1486" height="1114" loading="lazy"></figure></div>
+          </div>
+          <div class="col span-6">
+            <div class="blk blk-image"><figure><img src="../../img/image-asset-N0BKMU.jpg" alt="" width="2046" height="1535" loading="lazy"></figure></div>
+          </div>
+        </div>
+        <div class="blk blk-html"><p>The result is good. Gears mesh well. The video you see is running at ~30% power. I later hang the assembly with ropes and run it at full power for half an hour. Gears still mesh well.</p><p>I cannot wait to assemble the whole ornithopter and do the drop test.</p></div>
+        <div class="blk blk-video"><div class="video"><iframe src="https://www.youtube.com/embed/-FWnzbUxF7U?rel=0" title="Video" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe></div></div>
+      </div>
+      <div class="col span-2 empty"></div>
+    </div>
+</div>
+</article>
+<nav class="post-pagination">
+  <a class="prev" href="../../towards-ornithopter/wing-structure"><svg class="chev" viewBox="0 0 9 16" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-miterlimit="10" points="7.4,1.2 2.5,7.9 7.4,14.7"/></svg><span class="pag-title">Wing Structure</span></a>
+  <a class="next" href="../../towards-ornithopter/reflection-over-spanning-tree-method"><span class="pag-title">Reflection Over Spanning Tree Method</span><svg class="chev" viewBox="0 0 9 16" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-miterlimit="10" points="1.6,1.2 6.5,7.9 1.6,14.7"/></svg></a>
+</nav>
+</main>
+<footer class="site-footer">
+<div class="section-inner">
+    <div class="blk blk-html"><p style="text-align:center">The website is created on Oct. 1st 2020. All blogs “published” earlier than that are published in Oct. 2020.</p><p style="text-align:center"><a href="../../">Home</a>    <a href="../../about">About</a>    <a href="../../towards-ornithopter">Towards Ornithopter</a>    <a href="../../jumping-vehicle">Jumping Vehicle</a>    <a href="../../moments-mechanical">Moments Mechanical</a>    <a href="../../course-projects">Course Projects</a>    <a href="../../life">Life</a></p></div>
+
+</div>
+</footer>
+<script src="../../js/site.js"></script>
+</body>
+</html>

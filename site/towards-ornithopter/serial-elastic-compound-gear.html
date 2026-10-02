@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Serial-Elastic Compound Gear — Siyuan Shao</title>
+<meta name="description" content="Absorbing crash impact and enabling full throttle">
+<link rel="canonical" href="https://www.shaosiyuan.com/towards-ornithopter/serial-elastic-compound-gear">
+<meta property="og:site_name" content="Siyuan Shao">
+<meta property="og:title" content="Serial-Elastic Compound Gear — Siyuan Shao">
+<meta property="og:url" content="https://www.shaosiyuan.com/towards-ornithopter/serial-elastic-compound-gear">
+<meta property="og:type" content="article">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Serial-Elastic Compound Gear — Siyuan Shao">
+<meta property="og:description" content="Absorbing crash impact and enabling full throttle">
+<meta name="twitter:description" content="Absorbing crash impact and enabling full throttle">
+<meta property="og:image" content="https://www.shaosiyuan.com/img/CompoundGear-1LQSOR.png">
+<meta name="twitter:image" content="https://www.shaosiyuan.com/img/CompoundGear-1LQSOR.png">
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Poppins:wght@400&display=swap">
+<link rel="stylesheet" href="../css/site.css">
+</head>
+<body class="is-post post-towards-ornithopter">
+<header class="site-header header-white">
+  <a class="site-title" href="../">Siyuan Shao</a>
+  <button class="menu-toggle" aria-label="Open menu" aria-expanded="false"><span></span><span></span></button>
+  <nav class="site-nav">
+    <a href="../">Home</a>
+    <a href="../about">About</a>
+    <a href="../towards-ornithopter" class="active">Towards Ornithopter</a>
+    <a href="../jumping-vehicle">Jumping Vehicle</a>
+    <a href="../moments-mechanical">Moments Mechanical</a>
+    <a href="../course-projects">Course Projects</a>
+    <a href="../life">Life</a>
+    <a href="../contact">Contact</a>
+  </nav>
+</header>
+<main>
+<article class="post">
+<div class="post-top">
+  <div class="post-meta"><time class="post-date" datetime="2021-07-21">Jul 21</time></div>
+  <h1 class="post-title">Serial-Elastic Compound Gear</h1>
+</div>
+<div class="post-body">
+<div class="row">
+      <div class="col span-2 empty"></div>
+      <div class="col span-8">
+        <div class="blk blk-html"><p>Serial-elasticity is good for two reasons: <strong>absorbing crash impact</strong> and <strong>enabling full throttle.</strong></p></div>
+        <div class="blk blk-video"><div class="video" data-embed="https://player.vimeo.com/video/577707715"><img src="../img/CompoundGear-ELKIWK.png" alt="Play video: Serial-Elastic Compound Gear" loading="lazy"></div></div>
+        <div class="blk blk-html"><p class="small" style="text-align:center">Figure 1. the old compound gear rigidly-assembled by epoxy (painted green above) and the new serial-elastic compound gear</p></div>
+        <div class="blk blk-html"><p><strong>Absorbing Crash Impact:</strong></p><p>My old compound gear was rigidly assembled with epoxy (Figure 1. Left). The epoxy keeps breaking apart during crashes. This reminded me of the first reading assignments I got from Prof. Kota: <em>Two Schools of Design.</em> Somewhere in this reading, Steven Vogel pointed out that nature’s designs (species in the natural world) are strong but not stiff: they bend but do not break. Vogel proposed that mechanical designs may also embrace flexibility/elasticity/compliance. </p><p>I designed and SLA-printed the serial-elastic compound gear on May 8 (Figure 1. Right). <u>It never broke</u>.</p><p><strong>Enabling Full Throttle:</strong></p><p>Back-of-envelope estimation suggests that the multibody-dynamics load is composed of two parts. At low <em>ω</em> (low flapping frequency), the gravitational load dominates. At high <em>ω</em>, the motional load dominates.</p></div>
+        <div class="blk blk-image"><figure><img src="../img/Equation1_Trimmed-FA4RJV.jpg" alt="Equation1_Trimmed.jpg" width="2500" height="376" loading="lazy"></figure></div>
+        <div class="blk blk-html"><p>The estimation was verified by all my observation from Jan. 2021 to Apr. 2021. At a low throttle (below 30%), the motor cannot overcome gravity and cannot complete the upward stroke. At a full throttle (100%), the motor stalled at the turning point from downstroke to upstroke, where the motional load reaches its peak. Serial-elasticity should reduce peak load, thus preventing the motor from stalling.</p><p>With the serial-elastic compound gear, <u>the motor no longer stalled at full throttle</u>.</p></div>
+        <div class="blk blk-image"><figure><img src="../img/Candidates-4TVQT6.png" alt="Figure 2. Two candidates of serial elasticity" width="2500" height="1406" loading="lazy"><figcaption><div><p class="small" style="text-align:center">Figure 2. Two candidates of serial elasticity </p></div></figcaption></figure></div>
+        <div class="blk blk-html"><p><strong>Two Candidates: Why Not Compliant Elbow</strong></p><p>Altenbuchner’s legendary flexible-wing ornithopter was later equipped with compliant elbows. That innovation was enabled by 1) Altenbuchner’s flexible-multi-body dynamics model and 2) Norman M. Wereley’s linear-periodic-time-varying algebra. 1) and 2) were both too difficult for my level. Serial-elastic compound gear is easier for me for the other two reasons.</p><p><strong>Serial-Elastic Compound Gear Keep Linkage Well Constraint:</strong></p><p>Since the compliant compound gear isn’t part of the linkage, the linkage kinematics wouldn’t be affected. However, if I give elbow compliance, this would add one more DoF into the linkage and the lower arm would no longer follow the prescribed kinematics. Compliant elbow would also introduce resonance issues.</p><p><strong>Serial-Elasticity itself Needs Eliminating Unwanted Compliance:</strong></p></div>
+        <div class="blk blk-image float-right" style="--float:0.375"><figure style="max-width:480px"><img src="../img/6DoF-T73NEG.png" alt="Figure 3. Six directions of compliance" width="480" height="540" loading="lazy"><figcaption><div><p class="small" style="text-align:center">Figure 3. Six directions of compliance</p></div></figcaption></figure></div>
+        <div class="blk blk-html"><p>Any spring has at least 6 directions of deformation (Figure 3), but not all directions are wanted. Constraining unwanted deformation and increasing wanted compliance is more difficult for the elbow than for the compound gear. Indeed, bearings on the compound gear have already constraint unwanted deformations.</p></div>
+      </div>
+      <div class="col span-2 empty"></div>
+    </div>
+</div>
+</article>
+<nav class="post-pagination">
+  <a class="prev" href="../towards-ornithopter/final-tests"><svg class="chev" viewBox="0 0 9 16" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-miterlimit="10" points="7.4,1.2 2.5,7.9 7.4,14.7"/></svg><span class="pag-title">Final Tests</span></a>
+  <a class="next" href="../towards-ornithopter/controller"><span class="pag-title">Controller</span><svg class="chev" viewBox="0 0 9 16" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-miterlimit="10" points="1.6,1.2 6.5,7.9 1.6,14.7"/></svg></a>
+</nav>
+</main>
+<footer class="site-footer">
+<div class="section-inner">
+    <div class="blk blk-html"><p style="text-align:center">The website is created on Oct. 1st 2020. All blogs “published” earlier than that are published in Oct. 2020.</p><p style="text-align:center"><a href="../">Home</a>    <a href="../about">About</a>    <a href="../towards-ornithopter">Towards Ornithopter</a>    <a href="../jumping-vehicle">Jumping Vehicle</a>    <a href="../moments-mechanical">Moments Mechanical</a>    <a href="../course-projects">Course Projects</a>    <a href="../life">Life</a></p></div>
+
+</div>
+</footer>
+<script src="../js/site.js"></script>
+</body>
+</html>

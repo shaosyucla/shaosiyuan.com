@@ -1,0 +1,21 @@
+<!--meta
+{
+  "title": "Active Pitch",
+  "date": "2021-03-30",
+  "order": 9,
+  "thumbnail": "/img/Annotation-AQF46K.png",
+  "excerpt": "<p>Hall sensor and shaking servo</p>"
+}
+-->
+    <div class="row">
+      <div class="col span-2 empty"></div>
+      <div class="col span-8">
+        <div class="blk blk-image"><figure style="max-width:948px"><img src="/img/Annotation-07U18O.png" alt="Annotation.png" width="948" height="470" loading="lazy"></figure></div>
+        <div class="blk blk-html"><p>To order to increase thrust, the ornithopter needs to actively adjust its lower arm pitch angle at precise timing. This requires the ornithopter to know the position of its wing or the phase angle of its gear.</p><p>We prefer Hall latches to motor encoders. First, we only care about two extreme positions and thus do not need the fine resolution of an encoder. Second, Hall latch is a non-contact sensor and thus poses less restriction on installation tolerance. Third, this US1881 sensor has been used by JSK-koubou in his design. So, we can get useful references from JSK-koubou. </p><p><strong>Sensor Repeatability Test</strong></p><p>Ideally, the sensor will output a signal when the magnet reaches a 0° offset angle. However, this is unlikely to happen because the magnetic field is in 3D instead of in 1D. Our sensor output a signal every time the magnet reaches around 25.4° offset angle, independent of motor speed. Thus, the repeatability of the sensor is verified.</p></div>
+        <div class="blk blk-video"><div class="video" data-embed="https://player.vimeo.com/video/531002490"><img src="/img/TestIllustrator-DCULK9.jpg" alt="Play video: Hall SensorTest" loading="lazy"></div></div>
+        <div class="blk blk-html"><p><strong>Servo Test</strong></p><p>My servo is very problematic. It is constantly shaking. In the test, I use a DC power supply and an expensive NI myRIO to ensure stable power and neat signal. I also chose a servo with a 200% torque margin. Still, the servo is shaking.</p></div>
+        <div class="blk blk-video"><div class="video"><iframe src="https://player.vimeo.com/video/531021580" title="Shaking Servo.mp4" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe></div></div>
+        <div class="blk blk-html"><p>One possible reason for the shaking is that I am directly loading the servo with a too-long cantilevered beam (the whole14-in long lower arm). This is like a serial-elastic actuator. Without a sophistically tuned controller, the actuator will overcompensate for the error and the system will never reach a steady state. Probably, the one-size-fits-all controller in our hobbyist servo is tuned for rigid body and not for our serial-elastic case. That’s why shaking happens.<br/>In the test, we solved the shaking by adding physical friction/damping from the vise. We are still trying to figure out how to add friction/damping from the lower arm wing. If that does not work, we will consider redesigning the lower arm. </p><p> <strong>Citation</strong>:</p><p>JSK-koubou, Bird drone production record, https://jisaku-koubou.com/archives/category/%e9%b3%a5%e5%9e%8b%e3%83%89%e3%83%ad%e3%83%bc%e3%83%b3%e4%bd%9c%e8%a3%bd%e8%a8%98%e9%8c%b2</p></div>
+      </div>
+      <div class="col span-2 empty"></div>
+    </div>

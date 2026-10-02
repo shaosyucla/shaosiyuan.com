@@ -1,0 +1,30 @@
+<!--meta
+{
+  "title": "Tail Kinematics",
+  "date": "2021-07-17",
+  "order": 6,
+  "thumbnail": "/img/CAD-Diagram-SNQ1JB.png",
+  "excerpt": "<p>A Spatial 2DoF Parallel Manipulator </p>"
+}
+-->
+    <div class="row">
+      <div class="col span-2 empty"></div>
+      <div class="col span-8">
+        <div class="blk blk-image"><figure style="max-width:1029px"><img src="/img/CAD-Diagram-KCR5GZ.png" alt="Figure 1. The tail is a 2 DoF parallel manipulator (I ignore the 2 local roll DoF on the S-S couplers). It works as an elevator and rudder by changing its pitch and yaw." width="1029" height="712" loading="lazy"><figcaption><div><p class="small" style="text-align:center">Figure 1. The tail is a 2 DoF parallel manipulator (I ignore the 2 local roll DoF on the S-S couplers). It works as an elevator and rudder by changing its pitch and yaw.</p></div></figcaption></figure></div>
+        <div class="blk blk-html"><p>Given a wanted pitch and yaw position of the tail, what should be the angular position of the servos (<em>R1</em>, <em>R2</em>)? This is an inverse kinematics problem.</p><p>One approach would be simply using <em>(R1+R2)/2</em> for tail-pitching and using <em>(R1-R2)/2</em> for tail-yawing. However, this approach implicitly assumes perfect symmetry, which assumption my fabricated skill did not satisfy. Luckily, I can solve the inverse kinematics analytically without assuming symmetry (Figure 2).</p></div>
+        <div class="blk blk-image"><figure style="max-width:560px"><img src="/img/Example-YQEGBQ.png" alt="Figure 2. Visualization of one solution. MATLAB code can be found here." width="560" height="420" style="aspect-ratio:100/53.79;object-fit:cover" data-focal="0.5,0.5" loading="lazy"><figcaption><div><p class="small" style="text-align:center">Figure 2. Visualization of one solution. MATLAB code can be found <a href="/s/TailKinematics_May11.zip">here</a>.</p></div></figcaption></figure></div>
+        <div class="blk blk-html"><p>The solution involves 8 matrix multiplications, 8 trigonometry operations, and 4 anti-trigonometry operations. My onboard Arduino doesn’t want such complicated computation. So I numerically simplified the inverse kinematics solution into a pair of 3rd order polynomials (<a href="/s/TailKinematics_May11.zip">details are here</a>). </p></div>
+        <div class="row">
+          <div class="col span-6">
+            <div class="blk blk-image"><figure style="max-width:800px"><img src="/img/Pitch-957MME.png" alt="Pitch.png" width="800" height="600" loading="lazy"></figure></div>
+          </div>
+          <div class="col span-6">
+            <div class="blk blk-image"><figure style="max-width:800px"><img src="/img/Yaw-UAKC6Y.png" alt="Yaw.png" width="800" height="600" loading="lazy"></figure></div>
+          </div>
+        </div>
+        <div class="blk blk-html"><p class="small" style="text-align:center">Figure 3. Comparison between fitted (numerically simplified) solutions and analytical solutions. The result of fitting seems good enough for me.</p></div>
+        <div class="blk blk-video float-right" style="--float:0.5"><div class="video" style="aspect-ratio:100/177.8"><iframe src="https://player.vimeo.com/video/576285493" title="Tail Demo May 28" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe></div></div>
+        <div class="blk blk-html"><p>My string-processing code automatically transforms the polynomials into a C function, which is copied and pasted into my ornithopter. A video demo is as follows.</p></div>
+      </div>
+      <div class="col span-2 empty"></div>
+    </div>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Controller — Siyuan Shao</title>
+<meta name="description" content="Command = Feedback + Feedforward">
+<link rel="canonical" href="https://www.shaosiyuan.com/towards-ornithopter/controller">
+<meta property="og:site_name" content="Siyuan Shao">
+<meta property="og:title" content="Controller — Siyuan Shao">
+<meta property="og:url" content="https://www.shaosiyuan.com/towards-ornithopter/controller">
+<meta property="og:type" content="article">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Controller — Siyuan Shao">
+<meta property="og:description" content="Command = Feedback + Feedforward">
+<meta name="twitter:description" content="Command = Feedback + Feedforward">
+<meta property="og:image" content="https://www.shaosiyuan.com/img/FlowChart-9WY35Q.png">
+<meta name="twitter:image" content="https://www.shaosiyuan.com/img/FlowChart-9WY35Q.png">
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Poppins:wght@400&display=swap">
+<link rel="stylesheet" href="../css/site.css">
+</head>
+<body class="is-post post-towards-ornithopter">
+<header class="site-header header-white">
+  <a class="site-title" href="../">Siyuan Shao</a>
+  <button class="menu-toggle" aria-label="Open menu" aria-expanded="false"><span></span><span></span></button>
+  <nav class="site-nav">
+    <a href="../">Home</a>
+    <a href="../about">About</a>
+    <a href="../towards-ornithopter" class="active">Towards Ornithopter</a>
+    <a href="../jumping-vehicle">Jumping Vehicle</a>
+    <a href="../moments-mechanical">Moments Mechanical</a>
+    <a href="../course-projects">Course Projects</a>
+    <a href="../life">Life</a>
+    <a href="../contact">Contact</a>
+  </nav>
+</header>
+<main>
+<article class="post">
+<div class="post-top">
+  <div class="post-meta"><time class="post-date" datetime="2021-07-20">Jul 20</time></div>
+  <h1 class="post-title">Controller</h1>
+</div>
+<div class="post-body">
+<div class="row">
+      <div class="col span-2 empty"></div>
+      <div class="col span-8">
+        <div class="blk blk-image"><figure><img src="../img/FlowChart-WOF88E.png" alt="Figure 1. Final version of overall controller. Created on late May." width="2500" height="1406" loading="lazy"><figcaption><div><p class="small" style="text-align:center">Figure 1. Final version of overall controller. Created on late May.</p></div></figcaption></figure></div>
+        <div class="blk blk-html"><p>Within the overall controller, the most problematic part is the yaw controller (Figure 1). It is a simple proportional feedback controller. During my over 30 flight tests in May, the ornithopter keeps yawing to the left in random amounts (Figure 2). </p></div>
+        <div class="blk blk-image"><figure><img src="../img/TestsFlightsInMay_2000p-O22YD7.png" alt="Figure 2. 13 sets of data collected in May. Earlier tests didn’t have an onboard data collection system." width="2000" height="1143" loading="lazy"><figcaption><div><p style="text-align:center">Figure 2. 13 sets of data collected in May. Earlier tests didn’t have an onboard data collection system. </p></div></figcaption></figure></div>
+        <div class="blk blk-html"><p>To figure our how much yaw motion is caused by the ornithopter itself, I need to eliminate the yaw motion caused by my right-handed launching motion. Thus, I turned to free-fall launch (Video 1).</p></div>
+        <div class="blk blk-video"><div class="video"><iframe src="https://player.vimeo.com/video/577351272" title="Untrimmed Free Falls June 3" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe></div></div>
+        <div class="blk blk-html"><p class="small" style="text-align:center">Video 1. Free-fall launches with rudder trimmed at 0 degrees. TYPO: THE TAIL IS NOT FIXED. IT IS COMMANDED BY CONTROLLER.</p><p>Free-fall launches gave repeatable measurements about how much the ornithopter itself yaw to the left. Although the yaw controller eventually forced the ornithopter to yaw back, it overcompensated. To reduce the yaw error and avoid overcompensation, I trimmed the equilibrium position of the rudder to 10 degrees. This constant feedforwards “controller” eliminated the yaw-to-left motion (Video 2).</p></div>
+        <div class="blk blk-video"><div class="video" data-embed="https://player.vimeo.com/video/577351257"><img src="../img/Test4_Thumbnail-UR1VKL.png" alt="Play video: Trimmed Free Falls June3" loading="lazy"></div></div>
+        <div class="blk blk-html"><p class="small" style="text-align:center">Video 2. Free-fall launches with rudder trimmed at 10 degrees</p></div>
+      </div>
+      <div class="col span-2 empty"></div>
+    </div>
+</div>
+</article>
+<nav class="post-pagination">
+  <a class="prev" href="../towards-ornithopter/serial-elastic-compound-gear"><svg class="chev" viewBox="0 0 9 16" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-miterlimit="10" points="7.4,1.2 2.5,7.9 7.4,14.7"/></svg><span class="pag-title">Serial-Elastic Compound Gear</span></a>
+  <a class="next" href="../towards-ornithopter/tail-kinematics"><span class="pag-title">Tail Kinematics</span><svg class="chev" viewBox="0 0 9 16" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-miterlimit="10" points="1.6,1.2 6.5,7.9 1.6,14.7"/></svg></a>
+</nav>
+</main>
+<footer class="site-footer">
+<div class="section-inner">
+    <div class="blk blk-html"><p style="text-align:center">The website is created on Oct. 1st 2020. All blogs “published” earlier than that are published in Oct. 2020.</p><p style="text-align:center"><a href="../">Home</a>    <a href="../about">About</a>    <a href="../towards-ornithopter">Towards Ornithopter</a>    <a href="../jumping-vehicle">Jumping Vehicle</a>    <a href="../moments-mechanical">Moments Mechanical</a>    <a href="../course-projects">Course Projects</a>    <a href="../life">Life</a></p></div>
+
+</div>
+</footer>
+<script src="../js/site.js"></script>
+</body>
+</html>

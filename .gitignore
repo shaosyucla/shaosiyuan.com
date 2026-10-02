@@ -1,0 +1,8 @@
+# raw Squarespace download, screenshots, test output (local reference only)
+original/
+compare/
+__pycache__/
+*.log
+# working notes (account details, review notes) stay local
+HOSTING-AND-VIDEO.md
+DIFFERENCES.md

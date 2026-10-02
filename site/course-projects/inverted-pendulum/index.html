@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inverted Pendulum — Siyuan Shao</title>
+<meta name="description" content="Lagrangian, LQR, LabView, and lots of fun!">
+<link rel="canonical" href="https://www.shaosiyuan.com/course-projects/inverted-pendulum">
+<meta property="og:site_name" content="Siyuan Shao">
+<meta property="og:title" content="Inverted Pendulum — Siyuan Shao">
+<meta property="og:url" content="https://www.shaosiyuan.com/course-projects/inverted-pendulum">
+<meta property="og:type" content="article">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Inverted Pendulum — Siyuan Shao">
+<meta property="og:description" content="Lagrangian, LQR, LabView, and lots of fun!">
+<meta name="twitter:description" content="Lagrangian, LQR, LabView, and lots of fun!">
+<meta property="og:image" content="https://www.shaosiyuan.com/img/Thumbnail-6F9NA0.png">
+<meta name="twitter:image" content="https://www.shaosiyuan.com/img/Thumbnail-6F9NA0.png">
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Poppins:wght@400&display=swap">
+<link rel="stylesheet" href="../../css/site.css">
+</head>
+<body class="is-post post-course-projects">
+<header class="site-header header-white">
+  <a class="site-title" href="../../">Siyuan Shao</a>
+  <button class="menu-toggle" aria-label="Open menu" aria-expanded="false"><span></span><span></span></button>
+  <nav class="site-nav">
+    <a href="../../">Home</a>
+    <a href="../../about">About</a>
+    <a href="../../towards-ornithopter">Towards Ornithopter</a>
+    <a href="../../jumping-vehicle">Jumping Vehicle</a>
+    <a href="../../moments-mechanical">Moments Mechanical</a>
+    <a href="../../course-projects" class="active">Course Projects</a>
+    <a href="../../life">Life</a>
+    <a href="../../contact">Contact</a>
+  </nav>
+</header>
+<main>
+<article class="post">
+<div class="post-top">
+  <div class="post-meta"><time class="post-date" datetime="2021-07-06">Jul 6</time></div>
+  <h1 class="post-title">Inverted Pendulum</h1>
+</div>
+<div class="post-body">
+<div class="row">
+  <div class="col span-2 empty"></div>
+  <div class="col span-8">
+    <div class="blk blk-image"><figure style="max-width:529px"><img src="../../img/Thumbnail-H1NFQM.png" alt="Figure 1 Rotary inverted pendulum (Oltean)" width="529" height="521" loading="lazy"><figcaption><div><p class="small" style="text-align:center">Figure 1 Rotary inverted pendulum (Oltean)</p></div></figcaption></figure></div>
+    <div class="blk blk-html"><p>The rotary inverted pendulum has 2 degrees of freedom: <em>α</em> of the under-actuated vertical link and <em>θ</em> of the actuated horizontal link (Figure 1). In lab 4 of MECHENG552, we measure <em>α </em>and <em>θ</em> in real-time, and developed a control system to swing up the vertical link and then stabilize it (Video 1).</p></div>
+    <div class="blk blk-video"><div class="video"><iframe src="https://player.vimeo.com/video/549352282" title="Inverted Pendulum.mp4" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe></div></div>
+    <div class="blk blk-html"><p class="small" style="text-align:center"> Video 1 Demo filmed on April 11, 2021</p><p>The overall development process is as follows:</p><p>   1.  Formulation (?)</p><p style="margin-left:40px">Formulate dynamics equation of inverted pendulum through Lagrangian mechanics (Prof. S. Awtar taught us).</p><p>   2.  Parameter Identification</p><p style="margin-left:40px">Mass and momentum parameters were identified through CAD models provided by Mr. Wirkner. Damping coefficients and motor constants were experimentally evaluated in lab 3, instructed by D. Schulman and N. Jalgaonkar.</p><p style="margin-left:40px">Now we have the numerical expression for the nonlinear equation in Step 1.</p><p>   3.  State-Space Model</p></div>
+    <div class="blk blk-image float-right" style="--float:0.5"><figure style="max-width:509px"><img src="../../img/FourDifferentModels-WKAX76.png" alt="Figure 2 Testing LQR with different levels of model" width="509" height="664" loading="lazy"><figcaption><div><p class="small">Figure 2 Testing LQR with different levels of model</p></div></figcaption></figure></div>
+    <div class="blk blk-html"><p style="margin-left:40px">Linearize the previous nonlinear equations around the vertical equilibrium position, and get a state-space model about <em>α,</em> <em>θ </em>and their 1st order derivatives.</p><p>   4.  LQR for Stabilizer Controller</p><p style="margin-left:40px">Guess a pair of cost matrix, and apply linear–quadratic regulator algorithm to generate a full-state feedback controller matrix <em>C</em>. Use SIMULINK to model dynamics equation in Step 2, and test whether controller matrix <em>C </em>can stabilize the inverted pendulum in SIMULINK world. If not, improve the guess for cost matrix. If yes, insert more realistic effects such as quantization and saturation into SIMULINK world, and then test controller matrix <em>C</em> again (Figure 2).</p><p>   5.  Swing-Up Controller</p><p style="margin-left:40px">Initially, the vertical link is at rest and pointing downward. To have it pointing upwards, we need to inject mechanical energy into the system. So, the controller input (<em>u</em>, torque of motor) has its magnitude proportional to the energy difference. The sign of <em>u</em> is set such that the motor is always injecting energy into the system.</p></div>
+    <div class="row">
+      <div class="col span-x empty" style="width:12.5%"></div>
+      <div class="col span-x" style="width:87.5%">
+        <div class="blk blk-image"><figure><img src="../../img/SwingerControllerEffort-CTL3US.png" alt="SwingerControllerEffort.png" width="1521" height="86" style="aspect-ratio:100/5.066;object-fit:cover" data-focal="0.5,0.5" loading="lazy"></figure></div>
+      </div>
+    </div>
+    <div class="blk blk-html"><p>   6.  LabView</p><p style="margin-left:40px">Setup the encoder, add a switching algorithm between two controllers, and have the whole system refreshing at 1kHz. Experiment suggests that a refreshing rate lower than 250Hz will give a bad enough estimation of velocity such that the switching algorithm malfunctions. </p></div>
+    <div class="blk blk-image"><figure><a href="../../s/InvertedPendulumLabViewCode.png"><img src="../../img/LabViewCode-VKF6Y3.png" alt="Figure 3 LabView Code" width="2481" height="913" loading="lazy"></a><figcaption><div><p class="small" style="text-align:center">Figure 3 LabView Code</p></div></figcaption></figure></div>
+    <div class="blk blk-html"><p>   7.  User Interface</p><p style="margin-left:40px">Plotting some useful real-time data makes debugging easier (Figure 4).</p></div>
+    <div class="blk blk-image"><figure style="max-width:1171px"><a href="../../s/InvertedPendulumFrontPanel.jpg"><img src="../../img/InvertedPendulumFrontPanel-MB9MF8.jpg" alt="Figure 4 Front panel of LabView monitors the state space, controller effort and switching algorithm" width="1171" height="775" loading="lazy"></a><figcaption><div><p class="small" style="text-align:center">Figure 4 Front panel of LabView monitors the state space, controller effort and switching algorithm</p></div></figcaption></figure></div>
+    <div class="blk blk-html"><p><strong>Acknowledgment</strong>:</p><p>This is MECHENG552 Lab 4. Again, this great course is instructed by Prof. Shorya Awtar.</p><p>The mechanical setup was made by UM Mechanical Engineering Machine Shop. I did modeling and control as described above.</p><p>Oltean, Stelian-Emilian. “Swing-up and Stabilization of the Rotational Inverted Pendulum Using PD and Fuzzy-PD Controllers.” <em>Procedia Technology</em>, vol. 12, Elsevier Ltd, 2014, pp. 57–64, doi:10.1016/j.protcy.2013.12.456.</p></div>
+  </div>
+  <div class="col span-2 empty"></div>
+</div>
+</div>
+</article>
+<nav class="post-pagination">
+  <a class="prev" href="../../course-projects/non-required-courses"><svg class="chev" viewBox="0 0 9 16" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-miterlimit="10" points="7.4,1.2 2.5,7.9 7.4,14.7"/></svg><span class="pag-title">Non-required Courses</span></a>
+  <a class="next" href="../../course-projects/magnetic-levitation"><span class="pag-title">Magnetic Levitation</span><svg class="chev" viewBox="0 0 9 16" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-miterlimit="10" points="1.6,1.2 6.5,7.9 1.6,14.7"/></svg></a>
+</nav>
+</main>
+<footer class="site-footer">
+<div class="section-inner">
+    <div class="blk blk-html"><p style="text-align:center">The website is created on Oct. 1st 2020. All blogs “published” earlier than that are published in Oct. 2020.</p><p style="text-align:center"><a href="../../">Home</a>    <a href="../../about">About</a>    <a href="../../towards-ornithopter">Towards Ornithopter</a>    <a href="../../jumping-vehicle">Jumping Vehicle</a>    <a href="../../moments-mechanical">Moments Mechanical</a>    <a href="../../course-projects">Course Projects</a>    <a href="../../life">Life</a></p></div>
+
+</div>
+</footer>
+<script src="../../js/site.js"></script>
+</body>
+</html>

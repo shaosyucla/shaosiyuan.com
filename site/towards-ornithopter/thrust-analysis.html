@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Thrust Analysis — Siyuan Shao</title>
+<meta name="description" content="An aerodynamics feature or a measurement error?">
+<link rel="canonical" href="https://www.shaosiyuan.com/towards-ornithopter/thrust-analysis">
+<meta property="og:site_name" content="Siyuan Shao">
+<meta property="og:title" content="Thrust Analysis — Siyuan Shao">
+<meta property="og:url" content="https://www.shaosiyuan.com/towards-ornithopter/thrust-analysis">
+<meta property="og:type" content="article">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Thrust Analysis — Siyuan Shao">
+<meta property="og:description" content="An aerodynamics feature or a measurement error?">
+<meta name="twitter:description" content="An aerodynamics feature or a measurement error?">
+<meta property="og:image" content="https://www.shaosiyuan.com/img/OrderOfMagnitudeAnalysisThumbnail-WQG07K.png">
+<meta name="twitter:image" content="https://www.shaosiyuan.com/img/OrderOfMagnitudeAnalysisThumbnail-WQG07K.png">
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Poppins:wght@400&display=swap">
+<link rel="stylesheet" href="../css/site.css">
+</head>
+<body class="is-post post-towards-ornithopter">
+<header class="site-header header-white">
+  <a class="site-title" href="../">Siyuan Shao</a>
+  <button class="menu-toggle" aria-label="Open menu" aria-expanded="false"><span></span><span></span></button>
+  <nav class="site-nav">
+    <a href="../">Home</a>
+    <a href="../about">About</a>
+    <a href="../towards-ornithopter" class="active">Towards Ornithopter</a>
+    <a href="../jumping-vehicle">Jumping Vehicle</a>
+    <a href="../moments-mechanical">Moments Mechanical</a>
+    <a href="../course-projects">Course Projects</a>
+    <a href="../life">Life</a>
+    <a href="../contact">Contact</a>
+  </nav>
+</header>
+<main>
+<article class="post">
+<div class="post-top">
+  <div class="post-meta"><time class="post-date" datetime="2021-07-26">Jul 26</time></div>
+  <h1 class="post-title">Thrust Analysis</h1>
+</div>
+<div class="post-body">
+<div class="row">
+      <div class="col span-2 empty"></div>
+      <div class="col span-8">
+        <div class="blk blk-image"><figure><img src="../img/a_s-OTXGQW.png" alt="Figure 1. Measured acceleration at sensor position. Each color corresponses to a different flight test." width="2500" height="1250" loading="lazy"><figcaption><div><p class="small" style="text-align:center">Figure 1. Measured acceleration at sensor position. Each color corresponses to a different flight test.</p></div></figcaption></figure></div>
+        <div class="blk blk-html"><p><strong>Wired Acceleration at Sensor <em>aₛ</em></strong></p><p>The acceleration at sensor <em>aₛ</em> has one wired features (Figure 1). <em>aₛ </em>is convex at the beginning of upstrokes. <strong>Is it the feature of flapping-wing aerodynamics? Or is it actually the feature of my measurement error? </strong>This is the key question that I try to answer in this blog.</p></div>
+        <div class="blk blk-image"><figure><img src="../img/HelperFreeBodyDiagramtemp-KMOTFY.png" alt="Figure 2. Free-body diagram of ornithopter about its center of mass C" width="2500" height="1211" style="aspect-ratio:100/62.86;object-fit:cover" data-focal="0.5,0.5" loading="lazy"><figcaption><div><p class="small" style="text-align:center">Figure 2. Free-body diagram of ornithopter about its center of mass <em>C</em></p></div></figcaption></figure></div>
+        <div class="blk blk-html"><p><strong>Acceleration at Center of Mass <em>a꜀</em> and Acceleration at Sensor <em>aₛ</em></strong></p><p>To evaluate thrust, I need <em>a꜀</em>, but what I had measured is <em>aₛ</em> (Figure 2). Due to the flapping motion, the displacement from sensor <em>S</em> to the center of mass <em>C </em>varies with time (eq. 1).This yield a difference between <em>a꜀ </em>and<em> aₛ</em><strong><em> </em></strong>(eq. 2)</p></div>
+        <div class="blk blk-image"><figure><img src="../img/Eq1-3OWOXU.jpg" alt="Eq1.jpg" width="2500" height="174" loading="lazy"></figure></div>
+        <div class="blk blk-image"><figure><img src="../img/Eq2-HFDWW5.jpg" alt="" width="2500" height="132" loading="lazy"></figure></div>
+        <div class="blk blk-html"><p>Applying point-mass Newton 2nd law to (eq. 2), I get (eq. 3)</p></div>
+        <div class="blk blk-image"><figure><img src="../img/Eq3-GG1NAB.jpg" alt="" width="2500" height="181" loading="lazy"></figure></div>
+        <div class="blk blk-html"><p>Unfortunately, my ornithopter has only measured <em>θ</em> and <em>aₛ</em>. What’s more, <em>θ </em>measurements are so seriously quantized that numerical differentiation becomes impractical. Thus, I cannot precisely evaluate the red term in (eq. 3).</p><p><strong>How Significant is the Red Term?</strong></p><p>To qualitatively analyze the significance of the red term, I approximated unknown values with sine function based on flapping phase angle <em>β=ωt </em>(eq. 4). As <em>β </em>goes from 0 to 2π, the wing flaps up and down, and the center of mass also moves up and then down. Experiment data also suggest approximating <em>θ </em>with sine function (Figure 3). </p></div>
+        <div class="blk blk-image"><figure><img src="../img/Eq4-XUE0C4.jpg" alt="Eq4.jpg" width="2500" height="183" loading="lazy"></figure></div>
+        <div class="blk blk-image"><figure><img src="../img/Pitch-0TA47O.png" alt="Figure 3. Flight test data for pitch angle θ is almost a sine function" width="2500" height="1406" loading="lazy"><figcaption><div><p class="small" style="text-align:center">Figure 3. Flight test data for pitch angle <em>θ </em>is almost a sine function</p></div></figcaption></figure></div>
+        <div class="blk blk-html"><p>The result has an interesting 2nd harmonic term (eq. 5 &amp; 6).    </p></div>
+        <div class="blk blk-image"><figure><img src="../img/Eq5-G4UIIZ.jpg" alt="Eq5.jpg" width="2500" height="251" loading="lazy"></figure></div>
+        <div class="blk blk-image"><figure><img src="../img/Eq6-83YFLN.jpg" alt="Eq6.jpg" width="2500" height="189" loading="lazy"></figure></div>
+        <div class="blk blk-html"><p><strong>Parameter Identification</strong></p><p>Parameter identification is done (eq. 7). Lengths come from CAD, and angles come from Fourier transformation of onboard pitch measurement (Figure 2). </p></div>
+        <div class="blk blk-image"><figure><img src="../img/Eq7-A8G4YM.jpg" alt="Eq7.jpg" width="2500" height="186" loading="lazy"></figure></div>
+        <div class="blk blk-image"><figure><img src="../img/Eq8-90XWYR.jpg" alt="Eq8.jpg" width="2500" height="226" loading="lazy"></figure></div>
+        <div class="blk blk-html"><p><strong>Answering Original Question</strong></p><p>The convexity of <em>aₛ </em>in the red rectangle of Figure 4 may root from the negative 2nd harmonic term in (eq. 8). The measured <em>aₛ </em>also has a positive 2nd harmonic term. They have the same order-of-magnitude amplitude (3.28 vs [1.5,1.8]),  similar phase angle (0.96 vs [0.9,1.1]), and exactly opposite sign (- vs +). Will they cancel each other so that <em>T/m</em> is not convex during the upstroke? Without precise measurement of <em>a꜀</em>, I will never know for sure.</p></div>
+        <div class="blk blk-image"><figure><img src="../img/a_s-CSXFNP.png" alt="Figure 4. Acceleration measurement at sensor position" width="2500" height="1250" loading="lazy"><figcaption><div><p class="small" style="text-align:center">Figure 4. Acceleration measurement at sensor position</p></div></figcaption></figure></div>
+        <div class="blk blk-html"><p><strong>Appendix</strong></p><p>Draft for the analysis is attached <a href="../s/AccelerationAnalysisDraft.pdf">here</a>.</p></div>
+      </div>
+      <div class="col span-2 empty"></div>
+    </div>
+</div>
+</article>
+<nav class="post-pagination">
+  <a class="prev" href="../towards-ornithopter/acknowdgement"><svg class="chev" viewBox="0 0 9 16" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-miterlimit="10" points="7.4,1.2 2.5,7.9 7.4,14.7"/></svg><span class="pag-title">Acknowledgement</span></a>
+  <a class="next" href="../towards-ornithopter/final-tests"><span class="pag-title">Final Tests</span><svg class="chev" viewBox="0 0 9 16" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-miterlimit="10" points="1.6,1.2 6.5,7.9 1.6,14.7"/></svg></a>
+</nav>
+</main>
+<footer class="site-footer">
+<div class="section-inner">
+    <div class="blk blk-html"><p style="text-align:center">The website is created on Oct. 1st 2020. All blogs “published” earlier than that are published in Oct. 2020.</p><p style="text-align:center"><a href="../">Home</a>    <a href="../about">About</a>    <a href="../towards-ornithopter">Towards Ornithopter</a>    <a href="../jumping-vehicle">Jumping Vehicle</a>    <a href="../moments-mechanical">Moments Mechanical</a>    <a href="../course-projects">Course Projects</a>    <a href="../life">Life</a></p></div>
+
+</div>
+</footer>
+<script src="../js/site.js"></script>
+</body>
+</html>

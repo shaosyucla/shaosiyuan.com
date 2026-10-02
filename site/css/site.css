@@ -1,0 +1,522 @@
+/* ============================================================
+   Siyuan Shao — site stylesheet
+   Change fonts, colors and sizes here first: every page uses these tokens.
+   ============================================================ */
+:root {
+  /* fonts */
+  --font-heading: 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'EB Garamond', Garamond, Georgia, serif;   /* live site: adobe-garamond-pro (Squarespace licence) */
+  --font-meta: 'Poppins', Arial, sans-serif;               /* dates */
+  --weight-heading: 500;
+  --weight-body: 400;
+
+  /* sizes (desktop) */
+  --size-body: 19px;
+  --size-large: 23.7px;
+  --size-small: 16px;
+  --size-h1: 62px;
+  --size-h2: 46px;
+  --size-h3: 34px;
+  --size-h4: 26px;
+  --size-card-title: 34px;
+  --size-site-title: 31px;
+  --size-nav: 19px;
+  --line-body: 1.8;
+
+  /* colors */
+  --color-text: #000;
+  --color-bg: #fff;
+  --color-link: #253551;
+  --color-navy: #253551;      /* "bright" sections: About, Contact */
+  --color-dark: #2a2829;      /* "dark" section: home hero */
+  --color-button-bg: #253551;
+  --color-button-text: #fff;
+
+  /* layout */
+  --gutter: 4vw;              /* page side margin */
+  --section-pad: 6.6vw;       /* section top/bottom padding */
+  --col-gap: 17px;            /* half the gap between columns */
+  --width-medium: 75%;
+  --width-narrow: 50%;
+  --header-h: 121px;
+}
+
+/* ------------------------------------------------------------ base */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-weight: var(--weight-body);
+  font-size: var(--size-body);
+  line-height: var(--line-body);
+}
+img { max-width: 100%; height: auto; display: block; }
+a { color: var(--color-link); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+h1, h2, h3, h4 { font-family: var(--font-heading); font-weight: var(--weight-heading); line-height: 1.23; margin: 32px 0; }
+h1 { font-size: var(--size-h1); }
+h2 { font-size: var(--size-h2); }
+h3 { font-size: var(--size-h3); }
+h4 { font-size: var(--size-h4); }
+p { margin: 0 0 16px; }
+p.blank { min-height: 1em; }
+p.large, .large { font-size: var(--size-large); }
+p.small, .small { font-size: var(--size-small); }
+hr { border: 0; border-top: 1px solid currentColor; opacity: .25; margin: 24px 0; }
+blockquote { margin: 24px 0; font-family: var(--font-heading); font-size: var(--size-h4); line-height: 1.4; }
+blockquote p { margin: 0 0 8px; }
+blockquote cite { font-style: normal; font-family: var(--font-body); font-size: var(--size-body); }
+figure { margin: 0 0 var(--col-gap); }
+figcaption { font-size: var(--size-small); line-height: 1.6; padding-top: 12px; }
+ul, ol { padding-left: 1.4em; margin: 0 0 16px; }
+
+/* ------------------------------------------------------------ header */
+.site-header {
+  position: absolute; top: 0; left: 0; right: 0; z-index: 10;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 38px var(--gutter);
+}
+.site-title {
+  font-family: var(--font-heading); font-weight: var(--weight-heading);
+  font-size: var(--size-site-title); line-height: 1.4; text-decoration: none; color: inherit;
+}
+.site-nav { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 4px 18px; }
+.site-nav a {
+  color: inherit; text-decoration: none; font-size: var(--size-nav); line-height: 1.6;
+  padding-bottom: 2px; border-bottom: 1px solid transparent;
+}
+.site-nav a:hover, .site-nav a.active { border-bottom-color: currentColor; }
+.header-white { color: #000; }
+.header-dark, .header-black, .header-bright { color: #fff; }
+.menu-toggle { display: none; }
+
+/* ------------------------------------------------------------ sections */
+.section {
+  position: relative; display: flex; flex-direction: column; justify-content: center;
+  padding: var(--section-pad) var(--gutter); overflow: hidden;
+}
+.section:first-child { padding-top: calc(var(--section-pad) + var(--header-h)); }
+.section-inner { position: relative; z-index: 1; width: 100%; margin: 0 auto; }
+.width-medium > .section-inner { max-width: var(--width-medium); }
+.width-narrow > .section-inner { max-width: var(--width-narrow); }
+.align-left > .section-inner { margin-left: 0; }
+.valign-top { justify-content: flex-start; }
+.valign-bottom { justify-content: flex-end; padding-bottom: var(--gutter); }
+.height-small { min-height: 33vh; }
+.height-medium { min-height: 66vh; }
+.height-large { min-height: 100vh; }
+.height-custom { padding-top: 12.8px; padding-bottom: 12.8px; }
+
+.theme-white { background: #fff; color: #000; }
+.theme-dark { background: var(--color-dark); color: #fff; }
+.theme-bright { background: var(--color-navy); color: #fff; }
+.theme-black { background: #000; color: #fff; }
+.theme-dark a, .theme-bright a, .theme-black a { color: inherit; }
+
+.section-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+.section-bg + .section-inner::before { content: none; }
+.section:has(.section-bg)::after {
+  content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  opacity: var(--overlay, 0);
+}
+.theme-white:has(.section-bg)::after { background: #fff; }
+.theme-black:has(.section-bg)::after, .theme-dark:has(.section-bg)::after { background: #000; }
+.page-life .section:first-child h1 { margin: 0; }
+
+/* ------------------------------------------------------------ rows and columns (Squarespace 12-col grid) */
+.row { display: flex; margin: 0 calc(-1 * var(--col-gap)); }
+.col { padding: 0 var(--col-gap); min-width: 0; }
+.span-0 { display: none; }
+.span-1 { width: 8.3333%; }  .span-2 { width: 16.6667%; } .span-3 { width: 25%; }
+.span-4 { width: 33.3333%; } .span-5 { width: 41.6667%; } .span-6 { width: 50%; }
+.span-7 { width: 58.3333%; } .span-8 { width: 66.6667%; } .span-9 { width: 75%; }
+.span-10 { width: 83.3333%; } .span-11 { width: 91.6667%; } .span-12 { width: 100%; }
+.row .row .col:only-of-type, .col > .row { flex: 1; }
+.col > .row { width: auto; }
+
+/* ------------------------------------------------------------ buttons, video, map, gallery */
+.button-row { margin: 17px 0 34px; }
+.button-row.center { text-align: center; }
+.button-row.right { text-align: right; }
+.button {
+  display: inline-block; background: var(--color-button-bg); color: var(--color-button-text) !important;
+  text-decoration: none; font-size: 17.5px; font-weight: 500; letter-spacing: .02em; line-height: 1.2;
+  padding: 21px 35px;
+}
+.button:hover { opacity: .85; }
+.video { position: relative; aspect-ratio: 16 / 9; margin: 0 0 var(--col-gap); background: #000; }
+.video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.map { aspect-ratio: 100 / 58.5; }
+.map iframe { width: 100%; height: 100%; border: 0; filter: grayscale(1) contrast(1.05); }
+.gallery { display: grid; gap: 34px; margin: 0 0 var(--col-gap); }
+.gallery.cols-2 { grid-template-columns: repeat(2, 1fr); }
+.gallery.cols-3 { grid-template-columns: repeat(3, 1fr); }
+.gallery.cols-4 { grid-template-columns: repeat(4, 1fr); }
+.gallery figure { margin: 0; }
+.gallery:not(.gallery-section) img { aspect-ratio: 1; object-fit: cover; width: 100%; }
+.gallery-section { grid-template-columns: repeat(3, 1fr); gap: 50px 4vw; align-items: start; }
+.gallery-section.is-masonry { display: flex; gap: 4.5vw; align-items: flex-start; }
+.gallery-section figcaption { font-size: 14.5px; }
+.gallery-section .masonry-col { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 50px; }
+.section-gallery { padding-top: 51px; padding-bottom: 51px; }
+.section-gallery > .section-inner { max-width: none; }
+
+/* ------------------------------------------------------------ blog list */
+.blog-list { padding: var(--gutter); }
+.cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 60px 17px; align-items: start; }
+.cards.masonry { display: flex; gap: 17px; align-items: flex-start; }
+.cards.masonry > .masonry-col { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 60px; }
+.cards.grid { padding: 0 4vw; gap: 60px 4vw; }
+.cards.grid .card-thumb img { aspect-ratio: 3 / 2; object-fit: cover; width: 100%; }
+.card-thumb { display: block; margin-bottom: 20px; }
+.card-thumb img { width: 100%; }
+.card-meta { font-family: var(--font-meta); font-size: 16px; line-height: 1; margin-bottom: 20px; }
+.card-date { font-family: var(--font-meta); }
+.card-title { font-size: var(--size-card-title); line-height: 1.4; margin: 0 0 30px; }
+.card-title a { color: inherit; text-decoration: none; }
+.card-excerpt { font-size: 16px; line-height: 1.8; }
+.card-excerpt p { margin: 16px 0; }
+.card-excerpt > :first-child { margin-top: 0; }
+.card-more { display: inline-block; font-size: 16px; margin-top: 20px; }
+
+/* ------------------------------------------------------------ post page */
+.post { padding: calc(var(--header-h) + 50px) var(--gutter) 38px; }
+.post-top { text-align: center; margin-bottom: 70px; }
+.post-meta { font-family: var(--font-meta); font-size: 16px; line-height: 1; margin-bottom: 32px; }
+.post-title { margin: 0; line-height: 1.4; }
+.post-body { max-width: var(--width-medium); margin: 0 auto; }
+.post-body > .row:first-child > .col:not(.empty) > :first-child { margin-top: 0; }
+.post-pagination {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 38px var(--gutter);
+}
+.post-pagination a {
+  display: flex; align-items: center; gap: 25px; color: inherit; text-decoration: none;
+  font-family: var(--font-heading); font-weight: var(--weight-heading); font-size: var(--size-card-title);
+}
+.post-pagination .arrow { font-family: var(--font-body); font-size: 44px; line-height: 1; transform: scaleX(.6); }
+
+/* ------------------------------------------------------------ footer */
+.site-footer {
+  min-height: 33vh; display: flex; flex-direction: column; justify-content: center;
+  padding: 51px var(--gutter);
+}
+.site-footer .section-inner { max-width: var(--width-medium); }
+
+/* ------------------------------------------------------------ phone (the live site keeps the desktop layout down to 768px) */
+@media (max-width: 767px) {
+  :root { --gutter: 6vw; --width-medium: 100%; --width-narrow: 100%; --header-h: 90px; }
+  .site-header { padding: 24px var(--gutter); }
+  .menu-toggle {
+    display: block; position: relative; z-index: 20; width: 34px; height: 24px; padding: 0;
+    background: none; border: 0; color: inherit; cursor: pointer;
+  }
+  .menu-toggle span { position: absolute; left: 0; right: 0; height: 1.5px; background: currentColor; transition: transform .2s; }
+  .menu-toggle span:first-child { top: 7px; }
+  .menu-toggle span:last-child { top: 16px; }
+  .site-nav {
+    position: fixed; inset: 0; z-index: 15; display: none; flex-direction: column; flex-wrap: nowrap;
+    justify-content: center; align-items: center; gap: 14px;
+    background: var(--color-bg); color: #000;
+  }
+  .site-nav a { font-size: 32px; }
+  .menu-open .site-nav { display: flex; }
+  .menu-open .menu-toggle { color: #000; }
+  .menu-open .menu-toggle span:first-child { transform: translateY(4.5px) rotate(45deg); }
+  .menu-open .menu-toggle span:last-child { transform: translateY(-4.5px) rotate(-45deg); }
+}
+@media (max-width: 767px) {
+  .row { display: block; margin: 0; }
+  .col { width: auto; padding: 0; }
+  .col.empty { display: none; }
+  .cards, .cards.grid { grid-template-columns: 1fr; padding: 0; }
+  .gallery.cols-3, .gallery.cols-4 { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+}
+
+/* ------------------------------------------------------------ collage image (photo + grey caption box) */
+/* measured on the live site: photo 60% wide, grey card 50% wide, they overlap by 10%;
+   the card is centred against the photo and padded by 5% of the block width */
+.collage { display: grid; grid-template-columns: 50% 10% 40%; margin-bottom: 0; }
+.collage > img, .collage > a { grid-row: 1; grid-column: 1 / 3; align-self: start; }
+.collage figcaption {
+  grid-row: 1; grid-column: 2 / 4; align-self: center; position: relative; z-index: 1;
+  /* % padding of a grid item is taken from its grid-area width (half the block): 10% = 5% of the block */
+  background: #e0e0db; padding: 10%; font-size: var(--size-body); line-height: var(--line-body);
+}
+.collage figcaption p { margin: 0; }
+.collage.image-right { grid-template-columns: 40% 10% 50%; }
+.collage.image-right > img, .collage.image-right > a { grid-column: 2 / 4; }
+.collage.image-right figcaption { grid-column: 1 / 3; }
+@media (max-width: 767px) {
+  .collage, .collage.image-right { display: block; }
+  .collage figcaption { margin: 0; }
+}
+
+/* ------------------------------------------------------------ blog list pages (Newer / Older Posts) */
+.list-pagination {
+  display: flex; justify-content: space-between; align-items: center; padding: 60px 0 0;
+}
+.list-pagination a {
+  display: flex; align-items: center; gap: 25px; color: inherit; text-decoration: none;
+  font-family: var(--font-heading); font-weight: var(--weight-heading); font-size: var(--size-card-title);
+}
+.list-pagination .arrow { font-family: var(--font-body); font-size: 44px; line-height: 1; transform: scaleX(.6); }
+
+/* vertical spacer block (Squarespace "spacer") */
+.spacer { height: 68px; }
+
+/* video with custom thumbnail: thumbnail + white play triangle until clicked */
+.video[data-embed] { cursor: pointer; overflow: hidden; }
+.video[data-embed] img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.video[data-embed]::after {
+  content: ""; position: absolute; left: 50%; top: 50%; width: 34px; height: 40px;
+  transform: translate(-40%, -50%); background: #fff; clip-path: polygon(0 0, 100% 50%, 0 100%);
+  filter: drop-shadow(0 0 6px rgba(0,0,0,.35)); transition: transform .15s;
+}
+.video[data-embed]:hover::after { transform: translate(-40%, -50%) scale(1.12); }
+
+/* category links before the date (Life Blog) */
+.card-cat, .post-cat { color: inherit; text-decoration: none; margin-right: 14px; }
+.card-cat:hover, .post-cat:hover { text-decoration: underline; }
+
+/* Life gallery: images fade up as they scroll into view (Squarespace "fade-up") */
+.fade-up { opacity: 0; transform: translateY(24px); transition: opacity .8s ease, transform .8s ease; }
+.fade-up.is-visible { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .fade-up { opacity: 1; transform: none; transition: none; } }
+
+/* ------------------------------------------------------------ Squarespace block model
+   Every block (text, image, video, button, ...) is one .blk with 17px padding top and bottom,
+   so blocks sit 34px apart. The first/last block in a column drops its outer padding.
+   Inside a block, the first/last element has no outer margin (paragraphs stay 16px apart). */
+.blk { padding: 17px 0; }
+.col > .blk:first-child, .section-inner > .blk:first-child, .post-body > .blk:first-child { padding-top: 0; }
+.col > .blk:last-child, .section-inner > .blk:last-child, .post-body > .blk:last-child { padding-bottom: 0; }
+.blk > :first-child { margin-top: 0; }
+.blk > :last-child { margin-bottom: 0; }
+.blk > figure, .blk > .video, .blk > .gallery, .blk > blockquote, .blk > hr, .blk > .button-row, .blk > .map { margin-top: 0; margin-bottom: 0; }
+.spacer { height: 34px; }
+
+/* ============================================================
+   Values measured on the live Squarespace site (2026-10-01, 1280x800 and 375x812)
+   ============================================================ */
+:root { --size-h2: 43.65px; --size-h4: 25.2px; }
+
+/* text blocks keep runs of spaces and line breaks (Squarespace: white-space: pre-wrap) */
+.blk-html p, .blk-html h1, .blk-html h2, .blk-html h3, .blk-html h4, .blk-html li, figcaption p { white-space: pre-wrap; }
+/* long words and URLs wrap instead of widening the page */
+.blk, .card-excerpt, figcaption { overflow-wrap: break-word; }
+ul, ol { padding-left: 40px; }
+p.blank { min-height: calc(1em * var(--line-body)); }
+
+/* image captions: body size (unless marked small), 16px below the image */
+figcaption { font-size: inherit; line-height: var(--line-body); padding-top: 16px; }
+figcaption p { margin: 0; }
+.blk > figure { margin-left: auto; margin-right: auto; }
+
+/* quote block */
+blockquote { font-family: var(--font-body); font-size: var(--size-large); line-height: var(--line-body); }
+.blk > blockquote { margin: 0; }
+blockquote p { margin: 0; }
+blockquote cite { display: block; text-align: right; font-family: var(--font-meta); font-size: 16px; line-height: 1; font-style: normal; }
+
+/* horizontal rule */
+hr { border: 0; height: 1px; background: rgb(128, 128, 128); opacity: 1; }
+.blk > hr { margin: 9.5px 0; }
+
+/* floated block (text wraps around it); --float = its share of the column */
+.blk.float-right { float: right; width: calc(var(--float) * (100% + 34px) - 17px); padding-left: 17px; }
+.blk.float-left { float: left; width: calc(var(--float) * (100% + 34px) - 17px); padding-right: 17px; }
+.col::after, .post-body::after, .section-inner::after { content: ""; display: table; clear: both; }
+
+/* post page: title column, space above the arrows, arrow links */
+.post { padding-bottom: 90px; }
+.post-top { max-width: var(--width-medium); margin-left: auto; margin-right: auto; }
+.post-pagination a {
+  font-family: var(--font-body); font-weight: var(--weight-body); font-size: var(--size-body);
+  line-height: var(--line-body); max-width: 45%;
+}
+.post-pagination .next { text-align: right; }
+.post-pagination .pag-title { font-family: var(--font-heading); font-weight: var(--weight-heading); font-size: var(--size-card-title); line-height: 1; }
+.post-pagination .chev { width: 18px; height: 32px; flex: none; }
+
+/* blog list: Older / Newer Posts */
+.list-pagination { padding: 0; margin: 76.8px 0 calc(38.4px + 77px); }
+.list-pagination a {
+  font-family: var(--font-body); font-weight: var(--weight-body); font-size: var(--size-body);
+  line-height: var(--line-body); gap: 12px;
+}
+.list-pagination .chev { width: 9px; height: 16px; flex: none; }
+
+/* masonry cards */
+.cards.masonry, .cards.masonry > .masonry-col { gap: 18px; }
+.card-excerpt { display: flow-root; }
+.card-excerpt p, .card-excerpt > :first-child { margin: 16px 0; }
+
+/* basic-grid cards (Moments Mechanical) */
+.cards.grid { padding: 0 40px; gap: 50px 60px; }
+.cards.grid .card-meta { margin-bottom: 10px; }
+.cards.grid .card-title { margin-bottom: 12px; }
+.cards.grid .card-excerpt p, .cards.grid .card-excerpt > :first-child { margin: 0; }
+
+/* empty list (category without posts) and empty page */
+.blog-list.empty, .empty-page { min-height: 67vh; }
+
+/* gallery block default gutter (Squarespace "padding: 50") */
+.gallery:not(.gallery-section) { gap: 50px; }
+
+/* Life page gallery: 59px gutters, 14px captions with 15px padding */
+.gallery-section.is-masonry, .gallery-section .masonry-col { gap: 59px; }
+.gallery-section figcaption { font-size: 14px; line-height: var(--line-body); padding: 15px 0; }
+
+/* phone */
+@media (max-width: 767px) {
+  :root { --size-site-title: 18px; --size-body: 18px; --section-pad: 14.3vw; --header-h: 83px; }
+  .site-header { padding: 23px var(--gutter); }
+  .menu-toggle { width: 35px; height: 37px; }
+  .menu-toggle span { height: 1px; }
+  .menu-toggle span:first-child { top: 12px; }
+  .menu-toggle span:last-child { top: 23px; }
+  .menu-open .menu-toggle span { left: 2.5px; right: 2.5px; }
+  .menu-open .menu-toggle span:first-child { transform: translateY(5.5px) rotate(45deg); }
+  .menu-open .menu-toggle span:last-child { transform: translateY(-5.5px) rotate(-45deg); }
+  .site-nav { gap: 22px; padding-top: 82px; }
+  .site-nav a, .site-nav a.active { font-size: 31.9px; line-height: 1; padding: 0; border: 0; }
+  .menu-open .site-title { position: relative; z-index: 20; color: #000; }
+  .site-footer a { white-space: nowrap; }
+  .blk.float-right, .blk.float-left { float: none; width: auto; padding-left: 0; padding-right: 0; }
+}
+
+/* ------------------------------------------------------------ fluid type, as Squarespace
+   Measured at 768 / 1024 / 1280 px: every size is 16px + k*vw. Below 768px Squarespace uses
+   fixed phone sizes (measured at 375px). */
+:root {
+  --size-body: calc(16px + 0.24vw);        /* 19.07px at 1280 */
+  --size-large: calc(16px + 0.6vw);        /* 23.68px */
+  --size-h1: calc(16px + 3.6vw);           /* 62.08px */
+  --size-h2: calc(16px + 2.16vw);          /* 43.65px */
+  --size-h3: calc(16px + 1.44vw);          /* 34.43px */
+  --size-h4: calc(16px + 0.72vw);          /* 25.22px */
+  --size-card-title: calc(16px + 1.44vw);  /* 34.43px: blog card titles, post arrows */
+  --size-site-title: calc(16px + 1.2vw);   /* 31.36px */
+  --size-nav: var(--size-body);
+}
+h1 { line-height: 1.232; }
+h2 { line-height: 1.3; }
+h3 { line-height: 1.4; }
+h4 { line-height: 1.366; }
+.blk.blk-horizontalrule > hr { margin: 9.5px 0; }
+
+@media (max-width: 767px) {
+  :root {
+    --size-body: 17.95px; --size-large: 20.87px; --size-h1: 45.23px; --size-h2: 33.54px;
+    --size-h4: 21.85px; --size-site-title: 17.95px;
+  }
+  /* stacked columns keep one block gap between them */
+  .row > .col:not(.empty) + .col:not(.empty) { padding-top: 17px; }
+  /* map block is a little wider than the text column on phones */
+  .map { margin: 0 -17px; aspect-ratio: 364 / 227; }
+}
+
+.map iframe { display: block; }
+
+/* ============================================================ round 2: exact Squarespace rules (read from its live site.css)
+   ------------------------------------------------------------ */
+/* font sizes: min(16px + k*vw, cap) on desktop/tablet (Squarespace --maxPageWidth: 1200px);
+   on phones 16px + k * min(1vh, 9px) (Squarespace scales phone type with the window HEIGHT) */
+:root {
+  --max-page: 1200px;
+  --size-body: min(calc(16px + 0.24vw), 19.2px);
+  --size-large: min(calc(16px + 0.6vw), 24px);
+  --size-h1: min(calc(16px + 3.6vw), 64px);
+  --size-h2: min(calc(16px + 2.16vw), 44.8px);
+  --size-h3: min(calc(16px + 1.44vw), 35.2px);
+  --size-h4: min(calc(16px + 0.72vw), 25.6px);
+  --size-card-title: min(calc(16px + 1.44vw), 35.2px);
+  --size-site-title: min(calc(16px + 1.2vw), 32px);
+}
+@media (max-width: 767px) {
+  :root {
+    --size-body: calc(16px + 0.24 * min(1vh, 9px));
+    --size-large: calc(16px + 0.6 * min(1vh, 9px));
+    --size-h1: calc(16px + 3.6 * min(1vh, 9px));
+    --size-h2: calc(16px + 2.16 * min(1vh, 9px));
+    --size-h3: calc(16px + 1.44 * min(1vh, 9px));
+    --size-h4: calc(16px + 0.72 * min(1vh, 9px));
+    --size-card-title: calc(16px + 1.44 * min(1vh, 9px));
+    --size-site-title: calc(16px + 0.24 * min(1vh, 9px));   /* measured 17.95px at 375x812 */
+  }
+}
+
+/* content never wider than 1200px (wide), 900px (medium), 600px (narrow) on big screens */
+.section-inner { max-width: var(--max-page); }
+.width-medium > .section-inner { max-width: min(var(--width-medium), calc(var(--max-page) * .75)); }
+.width-narrow > .section-inner { max-width: min(var(--width-narrow), calc(var(--max-page) * .5)); }
+.align-left > .section-inner { margin-left: max(0px, calc((100% - var(--max-page)) / 2)); }
+.post-top, .post-body { max-width: min(var(--width-medium), var(--max-page)); }
+.site-footer .section-inner { max-width: min(var(--width-medium), calc(var(--max-page) * .75)); }
+.section-gallery > .section-inner, .blog-list > .cards.masonry { max-width: none; }
+.cards.grid { max-width: calc(var(--max-page) - 8vw); margin: 0 auto; padding: 0; }
+
+/* block padding, as Squarespace: first block in a column has no top padding, a block alone in its
+   column has none at the bottom either, a row that follows a block or a row keeps both, floats keep both */
+.col > .blk:last-child, .section-inner > .blk:last-child, .post-body > .blk:last-child { padding-bottom: 17px; }
+.col > .blk:first-child:last-child, .section-inner > .blk:first-child:last-child, .post-body > .blk:first-child:last-child { padding-bottom: 0; }
+.blk + .row .col > .blk:first-child, .row + .row .col > .blk:first-child { padding-top: 17px; }
+.blk + .row .col > .blk:first-child:last-child, .row + .row .col > .blk:first-child:last-child { padding-bottom: 17px; }
+.col > .blk.float-left, .col > .blk.float-right { padding-top: 17px; padding-bottom: 17px; }
+
+/* image caption paragraphs keep their bottom margin; grey caption cards space their paragraphs 15px */
+figure:not(.collage) figcaption p { margin: 0 0 16px; }
+.collage figcaption p + p { margin-top: 15px; }
+
+/* quote block: 1em above and below (Squarespace .sqs-block-quote { margin: 1em 0 }) */
+.blk.blk-quote > blockquote { margin: var(--size-body) 0; }
+
+/* gallery block: one gutter below the last row */
+.blk.blk-gallery > .gallery { padding-bottom: 50px; }
+
+/* blog list as the first section: header height + page gutter above */
+.section.blog-list:first-child { padding-top: calc(var(--header-h) + var(--gutter)); }
+.card-meta.has-cats, .post-meta.has-cats { line-height: var(--line-body); }
+
+/* Read More: a 1px line under the text box, not a text underline */
+.card-more { text-decoration: none; }
+.card-more::after { content: ""; display: block; height: 1px; background: currentColor; }
+
+/* prev/next links take up to half the row */
+.post-pagination a { max-width: 50%; }
+
+/* horizontal rule: black, 1px */
+hr { background: #000; }
+
+/* list items: paragraphs inside items are 10px apart */
+li > p { margin: 0 0 10px; }
+
+/* Life gallery: no extra space under the last caption */
+.section-gallery { padding-bottom: 36px; }
+
+@media (max-width: 767px) {
+  .menu-toggle { width: 47px; height: 37px; }
+  .menu-toggle span { left: 6px; right: 6px; }
+  .menu-open .menu-toggle span { left: 8.5px; right: 8.5px; }
+  .site-nav { padding-top: 78px; }
+  .site-footer { min-height: 0; padding: 26.8px var(--gutter); }
+}
+
+/* ------------------------------------------------------------ spacing that scales with the window, as Squarespace
+   (values at 1280px in brackets): header padding 3vw (38.4), post top gap 4vw (51.2),
+   post bottom 3vw + 4vw (89.6), arrows row padding 3vw (38.4), nav item gap 1.4vw (18) */
+:root { --header-h: calc(6vw + var(--size-site-title) * 1.4); }
+.site-header { padding: 3vw var(--gutter); }
+.site-nav { gap: 4px 1.4vw; }
+.post { padding-top: calc(var(--header-h) + var(--gutter)); padding-bottom: 7vw; }
+.post-pagination { padding: 3vw var(--gutter); }
+.list-pagination { margin: 6vw 0 9vw; }
+.post-meta.has-cats { line-height: 1; }
+@media (max-width: 767px) {
+  :root { --header-h: 83px; }
+  .site-header { padding: 23px var(--gutter); }
+  .site-nav { gap: 22px; }
+}

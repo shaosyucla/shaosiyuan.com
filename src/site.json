@@ -1,0 +1,44 @@
+{
+  "siteTitle": "Siyuan Shao",
+  "nav": [
+    {
+      "label": "Home",
+      "href": "/index.html"
+    },
+    {
+      "label": "About",
+      "href": "/about.html"
+    },
+    {
+      "label": "Towards Ornithopter",
+      "href": "/towards-ornithopter.html"
+    },
+    {
+      "label": "Jumping Vehicle",
+      "href": "/jumping-vehicle.html"
+    },
+    {
+      "label": "Moments Mechanical",
+      "href": "/moments-mechanical.html"
+    },
+    {
+      "label": "Course Projects",
+      "href": "/course-projects.html"
+    },
+    {
+      "label": "Life",
+      "href": "/life.html"
+    },
+    {
+      "label": "Contact",
+      "href": "/contact.html"
+    }
+  ],
+  "listDateFormat": "{m}/{d}/{yy}",
+  "postDateFormat": "{Mon} {d}",
+  "postsPerPage": 20,
+  "aliases": {
+    "home.html": "/index.html"
+  },
+  "siteUrl": "https://www.shaosiyuan.com"
+}

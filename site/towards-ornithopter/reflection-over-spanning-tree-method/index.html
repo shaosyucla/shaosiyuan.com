@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reflection Over Spanning Tree Method — Siyuan Shao</title>
+<meta name="description" content="Did I do the most important coupling first?">
+<link rel="canonical" href="https://www.shaosiyuan.com/towards-ornithopter/reflection-over-spanning-tree-method">
+<meta property="og:site_name" content="Siyuan Shao">
+<meta property="og:title" content="Reflection Over Spanning Tree Method — Siyuan Shao">
+<meta property="og:url" content="https://www.shaosiyuan.com/towards-ornithopter/reflection-over-spanning-tree-method">
+<meta property="og:type" content="article">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Reflection Over Spanning Tree Method — Siyuan Shao">
+<meta property="og:description" content="Did I do the most important coupling first?">
+<meta name="twitter:description" content="Did I do the most important coupling first?">
+<meta property="og:image" content="https://www.shaosiyuan.com/img/Graph-901VN2.jpg">
+<meta name="twitter:image" content="https://www.shaosiyuan.com/img/Graph-901VN2.jpg">
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Poppins:wght@400&display=swap">
+<link rel="stylesheet" href="../../css/site.css">
+</head>
+<body class="is-post post-towards-ornithopter">
+<header class="site-header header-white">
+  <a class="site-title" href="../../">Siyuan Shao</a>
+  <button class="menu-toggle" aria-label="Open menu" aria-expanded="false"><span></span><span></span></button>
+  <nav class="site-nav">
+    <a href="../../">Home</a>
+    <a href="../../about">About</a>
+    <a href="../../towards-ornithopter" class="active">Towards Ornithopter</a>
+    <a href="../../jumping-vehicle">Jumping Vehicle</a>
+    <a href="../../moments-mechanical">Moments Mechanical</a>
+    <a href="../../course-projects">Course Projects</a>
+    <a href="../../life">Life</a>
+    <a href="../../contact">Contact</a>
+  </nav>
+</header>
+<main>
+<article class="post">
+<div class="post-top">
+  <div class="post-meta"><time class="post-date" datetime="2020-12-05">Dec 5</time></div>
+  <h1 class="post-title">Reflection Over Spanning Tree Method</h1>
+</div>
+<div class="post-body">
+<div class="row">
+      <div class="col span-2 empty"></div>
+      <div class="col span-8">
+        <div class="blk blk-image"><figure><img src="../../img/Graph-TS6INU.jpg" alt="The local graph of gearbox (excluding other progress in aircraft dynamics and wing structure). The numbers on directed edges (arrows) indicates the time sequence. For annotated graph, please see this file" width="1666" height="1037" loading="lazy"><figcaption><div><p class="small" style="text-align:center">The local graph of gearbox (excluding other progress in aircraft dynamics and wing structure). The numbers on directed edges (arrows) indicates the time sequence. For annotated graph, please see this <a href="../../s/Graph_Dec5.pdf">file</a></p></div></figcaption></figure></div>
+      </div>
+      <div class="col span-2 empty"></div>
+    </div>
+    <div class="row">
+      <div class="col span-2 empty"></div>
+      <div class="col span-8">
+        <div class="blk blk-html"><p>Two months ago, I said “solving a multi-disciplinary problem is like finding a maximum spanning tree of a graph. The weight of the edge corresponds to how closely the two disciplines are coupled together.” Furthermore, I believed that, to ensure that I deal with most important coupling first, I should apply Kruskal’s algorithm for finding such a tree.</p><p>I am still thinking whether I was wrong. I admit that this is not a tree but a graph with loops. I also admit that I didn’t completely follow' Kruskal’s algorithm. My question is: did I do the most important coupling first?</p></div>
+        <div class="blk blk-image"><figure><img src="../../img/Graph_Simplified-IUMEYM.jpg" alt="Simplified graph" width="1622" height="1057" loading="lazy"><figcaption><div><p class="small" style="text-align:center">Simplified graph</p></div></figcaption></figure></div>
+        <div class="blk blk-html"><p>Maybe I did. All those red couplings are indeed more important than others. If you look at the first graph, you can see that those red couplings are indeed made earlier than others. The result is, all those other objects are compromising for each other (such as bearings, gears, motors), but those important couplings in red did not compromise much.</p><p>Am I wrong? I am still thinking.</p></div>
+      </div>
+      <div class="col span-2 empty"></div>
+    </div>
+</div>
+</article>
+<nav class="post-pagination">
+  <a class="prev" href="../../towards-ornithopter/fitting-and-constraint"><svg class="chev" viewBox="0 0 9 16" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-miterlimit="10" points="7.4,1.2 2.5,7.9 7.4,14.7"/></svg><span class="pag-title">Fitting and Constraint</span></a>
+  <a class="next" href="../../towards-ornithopter/foreword-hobbyist-and-professional-designs"><span class="pag-title">Foreword: Hobbyist and Professional Designs</span><svg class="chev" viewBox="0 0 9 16" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-miterlimit="10" points="1.6,1.2 6.5,7.9 1.6,14.7"/></svg></a>
+</nav>
+</main>
+<footer class="site-footer">
+<div class="section-inner">
+    <div class="blk blk-html"><p style="text-align:center">The website is created on Oct. 1st 2020. All blogs “published” earlier than that are published in Oct. 2020.</p><p style="text-align:center"><a href="../../">Home</a>    <a href="../../about">About</a>    <a href="../../towards-ornithopter">Towards Ornithopter</a>    <a href="../../jumping-vehicle">Jumping Vehicle</a>    <a href="../../moments-mechanical">Moments Mechanical</a>    <a href="../../course-projects">Course Projects</a>    <a href="../../life">Life</a></p></div>
+
+</div>
+</footer>
+<script src="../../js/site.js"></script>
+</body>
+</html>

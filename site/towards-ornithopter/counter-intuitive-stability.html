@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Counter-Intuitive Stability — Siyuan Shao</title>
+<meta name="description" content="Flapping mode and glider mode. Who has a more stable free response?">
+<link rel="canonical" href="https://www.shaosiyuan.com/towards-ornithopter/counter-intuitive-stability">
+<meta property="og:site_name" content="Siyuan Shao">
+<meta property="og:title" content="Counter-Intuitive Stability — Siyuan Shao">
+<meta property="og:url" content="https://www.shaosiyuan.com/towards-ornithopter/counter-intuitive-stability">
+<meta property="og:type" content="article">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Counter-Intuitive Stability — Siyuan Shao">
+<meta property="og:description" content="Flapping mode and glider mode. Who has a more stable free response?">
+<meta name="twitter:description" content="Flapping mode and glider mode. Who has a more stable free response?">
+<meta property="og:image" content="https://www.shaosiyuan.com/img/ActivePitch3_May8_Superpose-IEPHE3.png">
+<meta name="twitter:image" content="https://www.shaosiyuan.com/img/ActivePitch3_May8_Superpose-IEPHE3.png">
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Poppins:wght@400&display=swap">
+<link rel="stylesheet" href="../css/site.css">
+</head>
+<body class="is-post post-towards-ornithopter">
+<header class="site-header header-white">
+  <a class="site-title" href="../">Siyuan Shao</a>
+  <button class="menu-toggle" aria-label="Open menu" aria-expanded="false"><span></span><span></span></button>
+  <nav class="site-nav">
+    <a href="../">Home</a>
+    <a href="../about">About</a>
+    <a href="../towards-ornithopter" class="active">Towards Ornithopter</a>
+    <a href="../jumping-vehicle">Jumping Vehicle</a>
+    <a href="../moments-mechanical">Moments Mechanical</a>
+    <a href="../course-projects">Course Projects</a>
+    <a href="../life">Life</a>
+    <a href="../contact">Contact</a>
+  </nav>
+</header>
+<main>
+<article class="post">
+<div class="post-top">
+  <div class="post-meta"><time class="post-date" datetime="2021-07-17">Jul 17</time></div>
+  <h1 class="post-title">Counter-Intuitive Stability</h1>
+</div>
+<div class="post-body">
+<div class="row">
+      <div class="col span-2 empty"></div>
+      <div class="col span-8">
+        <div class="blk blk-video"><div class="video" data-embed="https://player.vimeo.com/video/575427301"><img src="../img/ActivePitch3_May8_Superpose-R2GMXW.png" alt="Play video: 2021 05 08 Ornithopter Flapping Mode Test 3" loading="lazy"></div></div>
+        <div class="blk blk-html"><p class="small" style="text-align:center">Video 1. A typical free response on May 8</p><p>Early analysis suggested that, compared to the glider mode, the flapping mode should have a higher static margin, and thus has higher longitudinal stability. However, I never truly believe in this counter-intuitive prediction. Moreover, I used to think that flapping mode should also have low lateral stability.  </p><p>To study the stability, I launched the ornithopter without implementing the tail controller. Surprisingly, 5 out of 6 glider mode tests ended up crashing in similar manners (Video 2):</p><p>The lateral stability was unable to counteract the poor single-hand-launch initial condition, thus the ornithopter yawed over to a huge side angle and lost speed. During the free fall, the glider-mode ornithopter regains its speed. However, with its poor longitudinal stability, it did not pitch up.</p></div>
+        <div class="blk blk-video"><div class="video" data-embed="https://player.vimeo.com/video/575599545"><img src="../img/Test4_GliderMode_Superpose-KC3VL2.png" alt="Play video: 2021 05 30 Ornithopter Glider Mode Test 4" loading="lazy"></div></div>
+        <div class="blk blk-html"><p class="small" style="text-align:center">Video 2. All 6 glider mode tests on May 8 were such a failure that Arthur and I did not even export our temporary video recording. Here is a glider mode test on May 30 that shows a similar failure.</p></div>
+        <div class="blk blk-html"><p>In comparison, 4 out of 8 flapping mode tests turned out to be successful flights. 2 of them even experienced stalling, then float in the air, then aggressively turned the nose down for over 90 degrees, and then start flying (Video 1).</p></div>
+      </div>
+      <div class="col span-2 empty"></div>
+    </div>
+</div>
+</article>
+<nav class="post-pagination">
+  <a class="prev" href="../towards-ornithopter/tail-kinematics"><svg class="chev" viewBox="0 0 9 16" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-miterlimit="10" points="7.4,1.2 2.5,7.9 7.4,14.7"/></svg><span class="pag-title">Tail Kinematics</span></a>
+  <a class="next" href="../towards-ornithopter/circuit"><span class="pag-title">Circuit</span><svg class="chev" viewBox="0 0 9 16" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-miterlimit="10" points="1.6,1.2 6.5,7.9 1.6,14.7"/></svg></a>
+</nav>
+</main>
+<footer class="site-footer">
+<div class="section-inner">
+    <div class="blk blk-html"><p style="text-align:center">The website is created on Oct. 1st 2020. All blogs “published” earlier than that are published in Oct. 2020.</p><p style="text-align:center"><a href="../">Home</a>    <a href="../about">About</a>    <a href="../towards-ornithopter">Towards Ornithopter</a>    <a href="../jumping-vehicle">Jumping Vehicle</a>    <a href="../moments-mechanical">Moments Mechanical</a>    <a href="../course-projects">Course Projects</a>    <a href="../life">Life</a></p></div>
+
+</div>
+</footer>
+<script src="../js/site.js"></script>
+</body>
+</html>
