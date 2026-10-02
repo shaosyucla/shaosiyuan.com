@@ -161,8 +161,10 @@ Copy the RULES, not the pixels: a rule matches on every device; screenshots only
 Visual review that converged: 7 reviewer agents read the side-by-side slices, 1 synthesizer groups the findings and
 re-checks examples. About 1.2M subagent tokens per full round; round results: 1 → 24 → 75 of 93 pages identical.
 
-Latest results (commit 278c1ff on the test address): url_test 190/190, clicks 37/37, pages 88/89 (contact map),
-device matrix 70/96 page checks clean (rest: listed below and third-party script errors from Vimeo/Google frames).
+Latest results (commit 1ef432b on the test address, 2026-10-01): url_test 190/190, clicks 37/37, pages 88/89 (contact
+map), device matrix 83/96 (all 13 left are script errors inside Vimeo's bot-check frame and the Google map; no layout
+differences). Drift test, spacing between texts within 6px: iPhone 83/89, 1280 84/89, iPad Mini 82/89; every page left
+is a font line wrap, a live load-timing quirk, or a cross-column comparison (section 8).
 
 ## 7. Traps met
 
@@ -185,13 +187,16 @@ device matrix 70/96 page checks clean (rest: listed below and third-party script
 - Measure text lines, not element boxes: padding inside vs margin outside moves the box but not the text.
 - Most remaining phone height differences are line wraps (EB Garamond vs Adobe Garamond Pro), ±32px per line.
 
-## 8. Open differences (not fixed yet)
+## 8. Open differences
 
-1. Collage figures below about 800px: live stacks them (photo about 80–90% wide, grey card overlapping below and
-   offset). The copy keeps them side by side down to 768px and stacks without overlap on phones
-   (Improved Lifestyle +190px on phones, Final Tests −178px on iPad). Measure the live geometry at 768 and 393px.
-2. Life page on phones about 200px taller (gallery caption wrap or item heights; measure).
-3. Blog card titles are `h2` in the copy, `h1` on the live site (invisible; SEO only).
-4. Contact map: standard Google embed in grayscale vs Squarespace's styled map.
-5. Body font (licence), browser-tab icon (live shows Squarespace's default), `/success` left out.
-6. Moments Mechanical phone grid: Read More about 9px lower; short pages' footer 3–4px higher.
+Fixed in round 4 (2026-10-01, commit 1ef432b): collage stacking (block < 415px), Life gallery caption margin, card
+titles `h1`, Moments Mechanical grid, short pages' footer, all phone/tablet section and block spacing.
+
+Still open:
+1. Contact map: standard Google embed in grayscale vs Squarespace's styled map (needs Squarespace's map key).
+2. Body font (licence), browser-tab icon (live shows Squarespace's default), `/success` left out (owner decisions).
+3. Line wraps: EB Garamond and Adobe Garamond Pro break lines in different places, so some paragraphs are one line
+   (about 32px on phones) longer or shorter. Long posts on phones end up to about 160px apart in height while every
+   spacing matches. Only the licensed font removes this.
+4. Not rules, not copied: Squarespace's masonry sometimes measures a card before the web font loads (a 41px gap on
+   Life Blog phones); its scroll-in animation draws a card about 15px low until it finishes.
