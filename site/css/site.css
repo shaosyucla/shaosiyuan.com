@@ -538,3 +538,47 @@ li > p { margin: 0 0 10px; }
   .menu-open .menu-toggle span:first-child { transform: rotate(45deg); }
   .menu-open .menu-toggle span:last-child { transform: rotate(-45deg); }
 }
+
+/* ============================================================ breakpoints, as Squarespace (measured on the live site)
+   menu button header:  below 800px        columns stack / phone type:  below 768px
+   Life gallery:        2 columns at 768px and below; gap 4.6vw, stepped down at 992 / 768 / 576px */
+.gallery-section.is-masonry, .gallery-section .masonry-col { gap: 4.6vw; }
+@media (max-width: 991px) { .gallery-section.is-masonry, .gallery-section .masonry-col { gap: 3.45vw; } }
+@media (max-width: 768px) { .gallery-section.is-masonry, .gallery-section .masonry-col { gap: 2.3vw; } }
+@media (max-width: 575px) { .gallery-section.is-masonry, .gallery-section .masonry-col { gap: 1.15vw; } }
+
+@media (max-width: 799px) {
+  :root { --header-h: calc(12vw + 40px); }
+  .site-header { padding: 6vw; }
+  .site-title { font-size: var(--size-body); line-height: 1.2; }
+  .menu-toggle {
+    display: block; position: relative; z-index: 20; width: 47px; height: 40px; padding: 0;
+    background: none; border: 0; color: inherit; cursor: pointer;
+  }
+  .menu-toggle span, .menu-toggle span:first-child, .menu-toggle span:last-child {
+    position: absolute; top: 20px; left: 6px; right: 6px; height: 1px; background: currentColor; transition: transform .2s;
+  }
+  .menu-toggle span:first-child { transform: translateY(-5.5px); }
+  .menu-toggle span:last-child { transform: translateY(5.5px); }
+  .menu-open .menu-toggle { color: #000; }
+  .menu-open .menu-toggle span { left: 10px; right: 10px; }
+  .menu-open .menu-toggle span:first-child { transform: rotate(45deg); }
+  .menu-open .menu-toggle span:last-child { transform: rotate(-45deg); }
+  .site-nav {
+    position: fixed; inset: 0; z-index: 15; display: none; flex-direction: column; flex-wrap: nowrap;
+    justify-content: center; align-items: center; gap: 22px; padding-top: 78px; background: var(--color-bg); color: #000;
+  }
+  .site-nav a, .site-nav a.active { font-size: 31.9px; line-height: 1; padding: 0; border: 0; }
+  .menu-open .site-nav { display: flex; }
+  .menu-open .site-title { position: relative; z-index: 20; color: #000; }
+}
+@media (max-width: 767px) {
+  .post-meta { margin-bottom: 20px; }
+  .cards.masonry, .cards.masonry > .masonry-col { gap: 5px; }
+  .cards.masonry .card-meta { margin-bottom: 8px; }
+  .card-more { margin-top: 8px; }
+  .cards.grid { row-gap: 29px; }
+}
+
+/* Life gallery section: page gutter above, gutter minus the 15px caption padding below */
+.section-gallery { padding-top: var(--gutter); padding-bottom: calc(var(--gutter) - 15px); }

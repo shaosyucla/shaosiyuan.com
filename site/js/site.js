@@ -20,7 +20,8 @@
 
   function columnsFor(list) {
     var n = +list.getAttribute('data-masonry') || 2;
-    if (window.innerWidth <= 767) return n > 2 ? 2 : 1;
+    if (n > 2 && window.innerWidth <= 768) return 2;   // Life gallery: 2 columns at 768px and below
+    if (window.innerWidth <= 767) return 1;            // blog cards: one column on phones
     return n;
   }
 
