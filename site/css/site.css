@@ -249,10 +249,14 @@ ul, ol { padding-left: 1.4em; margin: 0 0 16px; }
 .collage.image-right { grid-template-columns: 40% 10% 50%; }
 .collage.image-right > img, .collage.image-right > a { grid-column: 2 / 4; }
 .collage.image-right figcaption { grid-column: 1 / 3; }
-@media (max-width: 767px) {
-  .collage, .collage.image-right { display: block; }
-  .collage figcaption { margin: 0; }
-}
+/* Squarespace adds .sqs-narrow-width when the block is under 415px wide (site.js adds .narrow the same way):
+   photo 90% wide, card 90% wide pulled up by 20% of the block, card padding 10% of the card;
+   photo left -> card on the right; photo right -> photo shifted 10% to the right, card on the left */
+.collage.narrow, .collage.narrow.image-right { display: block; }
+.collage.narrow > img, .collage.narrow > a { display: block; width: 90%; }
+.collage.narrow.image-right > img, .collage.narrow.image-right > a { margin-left: 10%; }
+.collage.narrow figcaption { width: 90%; margin: -20% 0 0 10%; padding: 9%; }
+.collage.narrow.image-right figcaption { margin-left: 0; }
 
 /* ------------------------------------------------------------ blog list pages (Newer / Older Posts) */
 .list-pagination {
@@ -413,8 +417,6 @@ h4 { line-height: 1.366; }
     --size-body: 17.95px; --size-large: 20.87px; --size-h1: 45.23px; --size-h2: 33.54px;
     --size-h4: 21.85px; --size-site-title: 17.95px;
   }
-  /* stacked columns keep one block gap between them */
-  .row > .col:not(.empty) + .col:not(.empty) { padding-top: 17px; }
   /* map block is a little wider than the text column on phones */
   .map { margin: 0 -17px; aspect-ratio: 364 / 227; }
 }
@@ -522,7 +524,7 @@ li > p { margin: 0 0 10px; }
 }
 
 /* ------------------------------------------------------------ round 3 (final review) */
-.gallery-section figcaption p { margin: 0; }                        /* gallery captions: no paragraph margin */
+.gallery-section figure figcaption p { margin: 0; }                 /* gallery captions: no paragraph margin (beats figure:not(.collage) figcaption p) */
 .cards.grid { row-gap: 65px; }                                       /* Squarespace .blog-basic-grid { grid-row-gap: 65px } */
 .collage figcaption div + div { margin-top: 15px; }                  /* caption card: label and text 15px apart */
 .blk.float-right { margin-left: 17px; }                              /* Squarespace floats: margin 17px on the text side */
@@ -582,3 +584,56 @@ li > p { margin: 0 0 10px; }
 
 /* Life gallery section: page gutter above, gutter minus the 15px caption padding below */
 .section-gallery { padding-top: var(--gutter); padding-bottom: calc(var(--gutter) - 15px); }
+
+/* ============================================================ round 4: Squarespace rules read from live_site.css (phones)
+   custom-height sections: content-wrapper padding calc(10vmax / 10) = 1vmax (12.8px at 1280 wide, 1vh on a portrait phone)
+   below 768px every block keeps 17px top and bottom: .sqs-layout .sqs-row .sqs-block:first-child/:last-child {17px !important}
+   lists: .blog-masonry / .blog-basic-grid padding var(--pagePadding) = 4vw top and bottom, 6vw sides on phones
+   basic grid on phones: no grid, items margin-bottom 30px; meta margin-bottom 2vw; Read More 2vw above (both list kinds) */
+.height-custom { padding-top: 1vmax; padding-bottom: 1vmax; }
+@media (max-width: 767px) {
+  main .blk { padding-top: 17px !important; padding-bottom: 17px !important; }
+  .blog-list { padding: 4vw 6vw; }
+  .section.blog-list:first-child { padding-top: calc(var(--header-h) + 4vw); }
+  .cards.grid { display: block; }
+  .cards.grid .card { margin-bottom: 30px; }
+  .cards.grid .card-meta, .cards.masonry .card-meta { margin-bottom: 2vw; }
+  .card-more { margin-top: 2vw; }
+}
+/* section padding, as Squarespace (vertical-alignment--middle): small 3.3vmax, medium 6.6vmax, large 10vmax,
+   custom N vh -> N/10 vmax (set inline as --section-pad); bottom-aligned: top doubled, bottom var(--pagePadding) = 4vw.
+   Footer = small section (3.3vmax) holding one block (17px on phones, 0 on wider screens) */
+:root { --section-pad: 6.6vmax; }
+.height-small { --section-pad: 3.3vmax; }
+.height-large { --section-pad: 10vmax; }
+.height-medium.valign-bottom { --section-pad: 13.2vmax; padding-bottom: 4vw; }
+.site-footer { min-height: 33vh; padding: 3.3vmax var(--gutter); }
+@media (max-width: 767px) {
+  .site-footer { padding: calc(3.3vmax + 17px) var(--gutter); }
+}
+@media (max-width: 767px) {
+  .col.span-x { width: auto !important; }                            /* uneven columns (inline width) stack full width too */
+}
+/* post end: .blog-item-content margin-bottom 3vw + article padding = page gutter (4vw; 6vw on phones) */
+.post { padding-bottom: calc(3vw + var(--gutter)); }
+/* short pages: the footer sits at the bottom of the window (Squarespace site wrapper min-height 100vh) */
+body { display: flex; flex-direction: column; min-height: 100vh; }
+main { flex: 1 0 auto; }
+.blog-list.empty, .empty-page { min-height: 0; }
+/* Fluid Engine block (only /introduction-to-password): grid cells, no block padding; on phones its rows set a minimum
+   height: N rows x 24px + (N-1) x 11px gap (inline --fe-min-mobile) */
+main .blk.fe { padding: 0 !important; }
+@media (max-width: 767px) { .blk.fe { min-height: var(--fe-min-mobile, 0); } }
+/* blog cards: thumbnails get their height from site.js (Squarespace rounding); category + date line uses the body strut */
+.cards.masonry .card-thumb img { object-fit: cover; }
+.card-meta.has-cats { line-height: calc(var(--size-body) * 1.8); }
+.post-meta.has-cats { line-height: 1; }                               /* post: categories + date in a 16px flex row */
+@media (max-width: 767px) { .cards.masonry .card-thumb { margin-bottom: 5vw; } }   /* .blog-image-wrapper margin 5vw */
+@media (max-width: 767px) { .blk.blk-spacer { display: none; } }   /* .sqs-layout .spacer-block { display:none } on phones */
+/* basic-grid thumbnails: Squarespace .image-wrapper { height:0; padding-bottom:66.666% } measures 1px taller; image covers it */
+.cards.grid .card-thumb { position: relative; height: 0; padding-bottom: calc(66.666% + 1px); overflow: hidden; }
+.cards.grid .card-thumb img { position: absolute; inset: 0; width: 100%; height: 100%; aspect-ratio: auto; object-fit: cover; }
+/* spacer block: one blank line of body text plus padding-bottom = its aspect ratio % of the column width
+   (Squarespace: content "&nbsp;" + .sqs-intrinsic padding-bottom) */
+.spacer { height: auto; }
+.spacer::before { content: "\00a0"; }

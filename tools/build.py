@@ -200,7 +200,7 @@ class Site:
             cards.append('''  <article class="card">
     %s
     <div class="card-meta%s">%s<time class="card-date" datetime="%s">%s</time></div>
-    <h2 class="card-title"><a href="%s">%s</a></h2>
+    <h1 class="card-title"><a href="%s">%s</a></h1>
     <div class="card-excerpt">%s</div>
     <a class="card-more" href="%s">Read More</a>
   </article>''' % (thumb, ' has-cats' if p.get('categories') else '', self.categories_html(p, 'card-cat'), p['date'], fmt(p['date'], self.cfg['listDateFormat']),

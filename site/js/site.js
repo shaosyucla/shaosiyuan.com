@@ -39,6 +39,13 @@
         list.appendChild(c);
         columns.push(c);
       }
+      // blog card thumbnails: Squarespace's script sizes them floor(round(width) * ratio) + 1 px high
+      var colW = Math.round(columns[0].getBoundingClientRect().width);
+      if (list.classList.contains('cards')) itemsOf.get(list).forEach(function (item) {
+        var img = item.querySelector('.card-thumb img');
+        var nw = img && +img.getAttribute('width'), nh = img && +img.getAttribute('height');
+        if (nw && nh) img.style.height = (Math.floor(colW * nh / nw) + 1) + 'px';
+      });
       // images carry width/height attributes, so heights are known before they load
       itemsOf.get(list).forEach(function (item) {
         var target = columns.reduce(function (a, b) { return b.offsetHeight < a.offsetHeight ? b : a; });
@@ -95,6 +102,15 @@
   if (q.indexOf('offset=') < 0 || q.indexOf('reversePaginate') >= 0) return;
   var next = document.querySelector('.list-pagination .next');
   if (next) location.replace(next.href);
+})();
+
+// Collage image blocks: stacked layout when the block is under 415px wide (Squarespace's sqs-narrow-width rule).
+(function () {
+  var figs = Array.prototype.slice.call(document.querySelectorAll('figure.collage'));
+  if (!figs.length) return;
+  function set() { figs.forEach(function (f) { f.classList.toggle('narrow', f.offsetWidth < 415); }); }
+  set();
+  window.addEventListener('resize', set);
 })();
 
 // Cropped images (data-focal="x,y", 0..1): centre the focal point in the box, as Squarespace does.

@@ -55,7 +55,17 @@ Copy the RULES, not the pixels: a rule matches on every device; screenshots only
   dates Poppins 16px.
 
 ### Layout widths and spacing
-- Page gutter 4vw (6vw on phones). Section padding 6.6vw (14.3vw on phones). First section adds the header height.
+- Page gutter 4vw (6vw on phones). First section adds the header height.
+- Section padding is in VMAX (the longer window side, so portrait phones and tablets use the HEIGHT), from
+  `.page-section.vertical-alignment--middle.section-height--small|medium|large > .content-wrapper`:
+  small 3.3vmax, medium 6.6vmax, large 10vmax; custom height N vh → `calc(N vmax / 10)` (inline on the live section;
+  the copy sets `--section-pad` inline, e.g. 9vmax for the 90vh heroes, 1vmax via `.height-custom`).
+  Bottom-aligned: top doubled (13.2vmax for medium), bottom `--pagePadding` 4vw. Top-aligned: the reverse.
+  Gallery and collection sections are excluded (their own padding).
+- Footer = small section: 3.3vmax plus the block's 17px on phones (0 on wider screens); min-height 33vh.
+- Short pages: the footer sits at the bottom of the window (site wrapper min-height 100vh; the copy uses a flex body).
+- Lists (`.blog-masonry`, `.blog-basic-grid`): padding `--pagePadding` = 4vw top and bottom, sides 4vw (6vw on phones).
+- Post end: `.blog-item-content` margin-bottom 3vw + article padding = gutter (4vw; 6vw on phones).
 - Content max width 1200px; medium sections 75% (max 900px); narrow 50% (max 600px); left-aligned sections start at the
   1200px box edge. Post top and body: `min(75%, 1200px)`.
 - Header: padding 3vw (desktop); header height = 6vw + site-title line. Below 800px: menu-button header, padding 6vw,
@@ -71,14 +81,21 @@ Copy the RULES, not the pixels: a rule matches on every device; screenshots only
 - A row that follows a block or another row restores both paddings. Floats keep both.
 - Squarespace's own selectors: `.sqs-row .sqs-block:not(.float):first-child {padding-top:0}`,
   `...:first-child:last-child {padding-bottom:0}`, `.sqs-block+.sqs-row ...`, `.sqs-row+.sqs-row ...` restore 17px.
+- PHONES (<768px): every block keeps 17px top AND bottom
+  (`@media (max-width:767px) .sqs-layout .sqs-row .sqs-block:first-child/:last-child {padding:17px !important}`).
+  The copy: `main .blk { padding-top/bottom: 17px !important }`. Spacer blocks are hidden on phones
+  (`.sqs-layout .spacer-block {display:none}`). Uneven columns (`span-x`, inline width) stack full width.
+- Fluid Engine blocks (only `/introduction-to-password`): no block padding; on phones the block spans N grid rows
+  of min 24px with 11px gaps (`--fe-min-mobile`).
 
 ### Breakpoints
 - Menu button header: below 800px. Columns stack, phone type and spacing: below 768px.
 - Live site keeps the desktop menu and two-column layouts on tablets 800–1024px.
 - Life gallery: 3 columns above 768px, 2 columns at 768px and below. Gap = 4.6vw, stepped down to 3.45vw (≤991px),
-  2.3vw (≤768px), 1.15vw (≤575px). Captions 14px, padding 15px 0. Gallery section padding = page gutter.
-- Blog masonry: 2 columns, 18px gap (5px on phones; card meta-to-title and excerpt-to-Read-More 8px on phones).
-- Basic grid (Moments Mechanical): width `1200px - 8vw`, column gap 60px, row gap 65px (29px on phones).
+  2.3vw (≤768px), 1.15vw (≤575px). Captions 14px, padding 15px 0, caption paragraph margin 0
+  (`.gallery-caption p.gallery-caption-content { margin:0 }`). Gallery section padding = page gutter.
+- Blog masonry: 2 columns, 18px gap (1 column and 5px on phones; meta-to-title and excerpt-to-Read-More 2vw on phones).
+- Basic grid (Moments Mechanical): width `1200px - 8vw`, column gap 60px, row gap 65px (phones: no grid, 30px item margin).
 
 ### Blocks
 - Image: caption body size (or `small` 16px), 16px below the image, caption paragraph keeps 16px bottom margin.
@@ -86,7 +103,12 @@ Copy the RULES, not the pixels: a rule matches on every device; screenshots only
   Small images keep their own width (`figure style="max-width:Npx"`) and are centred.
 - Section background images: focal point as PERCENTAGE (`object-position: fx% fy%`) — a different formula from image blocks.
 - Collage (photo + grey card): photo 60% wide, card 50% wide, overlap 10%, card padding 5% of the block, background
-  #e0e0db, card centred against the photo, 15px between card paragraphs. (Narrow screens: see open items.)
+  #e0e0db, card centred against the photo, 15px between card paragraphs.
+  Narrow rule (Squarespace script: `.image-block-outer-wrapper` `offsetWidth < 415` → `sqs-narrow-width`, on load and
+  resize): the BLOCK width decides, not the window. Stacked: photo 90% wide at its own aspect ratio, card 90% wide pulled
+  up by 20% of the block (`margin-top: calc(-10% - 10%)`), card padding 10% of the card. Photo left → card on the right;
+  photo right → photo shifted 10% right, card on the left. site.js adds `.narrow` the same way. Half-width collages
+  stack on tablets (768–1024px) while full-width ones stay side by side on phones wider than about 470px.
 - Float blocks: width = span / parent-column-span of the column, image inset 17px, 17px margin on the text side.
 - Quote: body font at the large size, `margin: 1em 0`, source right-aligned in Poppins 16px.
 - Horizontal rule: 1px black, 9.5px margin. Gallery block: gap = its JSON `padding` (50px) plus one gap below.
@@ -94,7 +116,12 @@ Copy the RULES, not the pixels: a rule matches on every device; screenshots only
 - Text: `white-space: pre-wrap` (keeps runs of spaces and line breaks); long URLs `overflow-wrap: break-word`.
   Empty paragraph = one blank line (`p.blank`). Underlined spans → `<u>`. Indented paragraphs keep `margin-left`.
 - Read More link: 1px line under the text box (not a text underline). Category label before the date on cards
-  (card meta then uses body line height).
+  (card meta then is one line of body font × 1.8, the parent's strut: 31.7px on phones, 34.3px at 1280).
+  Post pages: category + date in a 16px flex row (title 32px below; 20px on phones).
+- Blog cards: masonry thumbnails are sized by Squarespace's script to `floor(round(column width) × ratio) + 1` px
+  (site.js does the same); thumbnail margin 20px (5vw on phones); meta margin 20px (2vw on phones); Read More 20px
+  above (2vw on phones). Basic grid: no grid on phones, items `margin-bottom: 30px`; thumbnail box
+  `padding-bottom: 66.666%` measures 1px taller (`calc(66.666% + 1px)`).
 
 ### Addresses, titles, metadata
 - Keep every live address: links without `.html`; each page also as `<page>/index.html` (trailing slash works);
@@ -128,6 +155,8 @@ Copy the RULES, not the pixels: a rule matches on every device; screenshots only
 | `python tools\make_review_pairs.py` | side-by-side slices (live left) in `compare\review\` for the visual-review workflow |
 | `python tools\measure_pairs.py`, `measure_devices.py`, `measure_live_extra.py` | measure the same elements on both sites |
 | `python tools\grep_live_css.py <selector part>` | read Squarespace's exact rule from `original\live_site.css` |
+| `python tools\drift_test.py <base> --device "iPhone 17 Pro"` (or `--width 1280`, `--device "iPad Mini"`, `--skip-live`, `p=/path`) | every heading/paragraph matched by text on both sites: drift, page height, and spacing errors with line-wrap (font) differences removed; `compare\drift\report_<setup>.txt` |
+| `python tools\measure_collage.py`, `measure_gallery.py` | collage boxes at 14 widths; every Life gallery item by caption |
 
 Visual review that converged: 7 reviewer agents read the side-by-side slices, 1 synthesizer groups the findings and
 re-checks examples. About 1.2M subagent tokens per full round; round results: 1 → 24 → 75 of 93 pages identical.
@@ -147,6 +176,14 @@ device matrix 70/96 page checks clean (rest: listed below and third-party script
 - CSS: `.blk > :first-child` beats `.blk > hr`; use `.blk.blk-<kind> > ...` for exceptions.
 - Percentage padding of a grid item is taken from its grid-area width, not the block width.
 - GitHub Pages folder vs file (`/towards-ornithopter` with both `towards-ornithopter.html` and a folder): write both.
+- A value tuned on ONE device hides a missing rule: 14.3vw section padding matched 375×812 only because it equals
+  6.6vmax there; a 26.8px footer padding was 3.3vmax at 812px height. When a phone value looks odd, look for vmax/vh.
+- Old compensation rules must go when the real rule lands (the stacked-column 17px rule double-counted once every
+  block kept 17px on phones). Re-run the drift test on every device after each rule.
+- `figure:not(.collage) figcaption p` (0,1,3) beats `.gallery-section figcaption p` (0,1,2): count `:not()` classes.
+- The live site has broken characters in some titles (U+FFFD); the drift test compares texts with non-ASCII as `?`.
+- Measure text lines, not element boxes: padding inside vs margin outside moves the box but not the text.
+- Most remaining phone height differences are line wraps (EB Garamond vs Adobe Garamond Pro), ±32px per line.
 
 ## 8. Open differences (not fixed yet)
 
