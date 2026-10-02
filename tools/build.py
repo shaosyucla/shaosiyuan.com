@@ -114,6 +114,7 @@ class Site:
         self.layout = read(os.path.join(SRC, 'layout.html'))
         self.footer = read(os.path.join(SRC, 'footer.html'))
         self.written = 0
+        self.urls = []   # page addresses for sitemap.xml
 
     def nav_html(self, active):
         items = []
@@ -166,7 +167,24 @@ class Site:
         if out_rel not in ('index.html', '404.html') and not out_rel.endswith('/index.html'):
             alt = out_rel[:-5] + '/index.html'
             write(os.path.join(SITE, alt.replace('/', os.sep)), relativize(page, alt.count('/')))
+        if out_rel == 'index.html' or not out_rel.endswith('/index.html'):
+            self.urls.append(page_url('/' + out_rel))
         self.written += 1
+
+    def write_sitemap(self):
+        """sitemap.xml + robots.txt, like Squarespace's: public pages, posts and category pages; no page-N list pages
+        and nothing under the addresses in site.json "sitemapExclude" (hidden pages)."""
+        site = self.cfg['siteUrl'].rstrip('/')
+        skip = self.cfg.get('sitemapExclude', [])
+        locs = [u for u in self.urls if not re.search(r'/page-\d+$', u)
+                and not any(u == s or u.startswith(s + '/') for s in skip)]
+        write(os.path.join(SITE, 'sitemap.xml'),
+              '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+              + ''.join('  <url><loc>%s%s</loc></url>\n' % (site, htmllib.escape(urllib.parse.quote(u, safe='/+')))
+                        for u in locs)
+              + '</urlset>\n')
+        write(os.path.join(SITE, 'robots.txt'), 'User-agent: *\nAllow: /\n\nSitemap: %s/sitemap.xml\n' % site)
+        print('sitemap: %d addresses' % len(locs))
 
     def categories_html(self, p, cls):
         """Category links shown before the date (Squarespace "primary meta: categories")."""
@@ -238,6 +256,7 @@ class Site:
             self.build_list_pages(name, meta, body, posts, href)
         for alias, target in self.cfg.get('aliases', {}).items():
             self.redirect(alias, target)
+        self.write_sitemap()
         print('wrote %d pages into %s' % (self.written, SITE))
 
     def build_list_pages(self, name, meta, body, posts, href):

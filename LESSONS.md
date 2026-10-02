@@ -13,7 +13,7 @@ check the copy against the live Squarespace site. Paths are absolute; the projec
 | Repository | `https://github.com/shaosyucla/shaosiyuan.com` (public). Local clone = the project root |
 | Test address | `https://shaosyucla.github.io/shaosiyuan.com/` (GitHub Pages, Actions workflow publishes `site/` on every push to `main`) |
 | Domain | `shaosiyuan.com` at Squarespace Domains, renews 2027-09-16, auto-renew ON. GitHub domain verification TXT record added and verified. DNS still points to Squarespace |
-| Not done yet | DNS switch, custom domain in GitHub Pages settings, Enforce HTTPS, cancel the Squarespace website plan |
+| Going live | 2026-10-01: custom domain `www.shaosiyuan.com` set in GitHub Pages (verified). Owner switches DNS in Squarespace (delete Squarespace Defaults; A @ → 185.199.108–111.153; CNAME www → shaosyucla.github.io). Then: Enforce HTTPS, re-test, cancel the Squarespace website plan (not the domain) after 1–2 weeks |
 
 ## 2. Project layout and edit loop
 

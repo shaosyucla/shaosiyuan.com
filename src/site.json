@@ -40,5 +40,6 @@
   "aliases": {
     "home.html": "/index.html"
   },
-  "siteUrl": "https://www.shaosiyuan.com"
+  "siteUrl": "https://www.shaosiyuan.com",
+  "sitemapExclude": ["/404", "/introduction-to-password", "/life-blog"]
 }
