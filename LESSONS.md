@@ -11,9 +11,9 @@ check the copy against the live Squarespace site. Paths are absolute; the projec
 | Copy | 90 pages (95 HTML files + `<page>/index.html` twins): 8 menu pages, 3 unlisted pages, `introduction-to-password`, 43 blog posts, hidden Life Blog (12 posts, 2 categories), 17 empty Course Projects categories, Towards Ornithopter page 2, `404.html`, `home` alias |
 | Left out | `/success` (password-protected on Squarespace). Owner decision: leave it out |
 | Repository | `https://github.com/shaosyucla/shaosiyuan.com` (public). Local clone = the project root |
-| Test address | `https://shaosyucla.github.io/shaosiyuan.com/` (GitHub Pages, Actions workflow publishes `site/` on every push to `main`) |
-| Domain | `shaosiyuan.com` at Squarespace Domains, renews 2027-09-16, auto-renew ON. GitHub domain verification TXT record added and verified. DNS still points to Squarespace |
-| Going live | 2026-10-01: custom domain `www.shaosiyuan.com` set in GitHub Pages (verified). Owner switches DNS in Squarespace (section 1a). Then: Enforce HTTPS, re-test, cancel the Squarespace website plan (not the domain) after 1–2 weeks |
+| Test address | `https://shaosyucla.github.io/shaosiyuan.com/` now redirects to the live domain. Actions workflow publishes `site/` on every push to `main` (live in about 1 minute) |
+| Domain | `shaosiyuan.com` at Squarespace Domains, renews 2027-09-16, auto-renew ON. DNS points to GitHub Pages since 2026-10-01 (section 1a) |
+| Live | Since 2026-10-02 02:45 PDT `https://www.shaosiyuan.com` is served by GitHub Pages: custom domain set, Let's Encrypt certificate for www + apex (GitHub renews it), Enforce HTTPS on; http, `shaosiyuan.com` and the old test address all redirect there. url_test 190/190 on the live domain. Squarespace website plan kept as the undo until about mid-October, then cancel the website plan only (not the domain) |
 
 ## 1a. DNS (Squarespace → Domains → shaosiyuan.com → DNS → DNS Settings)
 
@@ -52,6 +52,14 @@ Old answers stay cached up to the 4-hour TTL; both sites look the same, so that 
 ADD PRESET has no GitHub entry (its list: Squarespace defaults, Squarespace domain connect, Squarespace Email Campaigns,
 Google Workspace, Titan, Zoho, Fastmail, Proton, Neo, iCloud Mail, Google Workspace verification, Vercel, Railway,
 Netlify), so the GitHub records go in through ADD RECORD. "Squarespace defaults" is greyed out while it is installed.
+
+Certificate trap (2026-10-01/02): after the DNS switch GitHub's checker kept the old `www` CNAME for the full 4-hour
+TTL, then reported both names eligible but never requested a certificate (no `https_certificate` in
+`gh api repos/shaosyucla/shaosiyuan.com/pages`). Fix: remove and re-add the custom domain
+(`echo '{"cname": null}' | gh api -X PUT repos/shaosyucla/shaosiyuan.com/pages --input -`, then
+`gh api -X PUT repos/shaosyucla/shaosiyuan.com/pages -f cname=www.shaosiyuan.com`): the certificate was approved within
+a minute. Then `gh api -X PUT repos/shaosyucla/shaosiyuan.com/pages -F https_enforced=true`. Re-saving the same value
+does not trigger it.
 
 Undo: delete the GitHub A/AAAA records and the `www` CNAME, then ADD PRESET → Squarespace defaults (or add the five
 records in the BEFORE table by hand). Works while the Squarespace website plan is still active.
@@ -199,6 +207,11 @@ Copy the RULES, not the pixels: a rule matches on every device; screenshots only
 | `python tools\grep_live_css.py <selector part>` | read Squarespace's exact rule from `original\live_site.css` |
 | `python tools\drift_test.py <base> --device "iPhone 17 Pro"` (or `--width 1280`, `--device "iPad Mini"`, `--skip-live`, `p=/path`) | every heading/paragraph matched by text on both sites: drift, page height, and spacing errors with line-wrap (font) differences removed; `compare\drift\report_<setup>.txt` |
 | `python tools\measure_collage.py`, `measure_gallery.py` | collage boxes at 14 widths; every Life gallery item by caption |
+
+After the DNS switch (2026-10-02) `https://www.shaosiyuan.com` IS the copy. url_test (saved live titles) and
+clickthrough `--skip-live` (saved live results) and drift_test `--skip-live` (`compare\drift\live_*.json`) still
+compare against Squarespace; matrix_test has no cache, so its "live" side is now the copy itself. Preview
+changes locally with serve.py before pushing: every push goes live.
 
 Visual review that converged: 7 reviewer agents read the side-by-side slices, 1 synthesizer groups the findings and
 re-checks examples. About 1.2M subagent tokens per full round; round results: 1 → 24 → 75 of 93 pages identical.
