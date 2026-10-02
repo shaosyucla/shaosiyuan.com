@@ -38,7 +38,8 @@ check the copy against the live Squarespace site. Paths are absolute; the projec
 5. Video: `<div class="video"><iframe src="https://www.youtube.com/embed/<id>?rel=0" ...></iframe></div>`, or with a
    custom thumbnail `<div class="video" data-embed="<player url>"><img src="/img/<thumb>" alt="Play video: ..."></div>`.
    Non-16:9 video: add `style="aspect-ratio:4/3"` (or the real ratio) to the `.video` div.
-6. `python tools\build.py`, then `python tools\check_links.py`, preview, commit, push.
+6. `python tools\build.py` (also writes `sitemap.xml` and `robots.txt`; hidden pages go in `site.json`
+   `"sitemapExclude"`), then `python tools\check_links.py`, preview, commit, push.
 
 ## 4. Squarespace rules reproduced (read from its live site.css and measured)
 
