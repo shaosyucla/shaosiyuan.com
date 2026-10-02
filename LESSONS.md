@@ -49,7 +49,11 @@ A name can hold only one CNAME, so the `www` record can only go in after the def
 of A records: visitors would land on either host at random and GitHub's certificate check fails.
 Old answers stay cached up to the 4-hour TTL; both sites look the same, so that is harmless.
 
-Undo: delete the GitHub A/AAAA records and the `www` CNAME, then ADD PRESET → Squarespace Defaults (or add the five
+ADD PRESET has no GitHub entry (its list: Squarespace defaults, Squarespace domain connect, Squarespace Email Campaigns,
+Google Workspace, Titan, Zoho, Fastmail, Proton, Neo, iCloud Mail, Google Workspace verification, Vercel, Railway,
+Netlify), so the GitHub records go in through ADD RECORD. "Squarespace defaults" is greyed out while it is installed.
+
+Undo: delete the GitHub A/AAAA records and the `www` CNAME, then ADD PRESET → Squarespace defaults (or add the five
 records in the BEFORE table by hand). Works while the Squarespace website plan is still active.
 
 ## 2. Project layout and edit loop
