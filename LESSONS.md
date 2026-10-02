@@ -14,6 +14,7 @@ check the copy against the live Squarespace site. Paths are absolute; the projec
 | Test address | `https://shaosyucla.github.io/shaosiyuan.com/` now redirects to the live domain. Actions workflow publishes `site/` on every push to `main` (live in about 1 minute) |
 | Domain | `shaosiyuan.com` at Squarespace Domains, renews 2027-09-16, auto-renew ON. DNS points to GitHub Pages since 2026-10-01 (section 1a) |
 | Live | Since 2026-10-02 02:45 PDT `https://www.shaosiyuan.com` is served by GitHub Pages: custom domain set, Let's Encrypt certificate for www + apex (GitHub renews it), Enforce HTTPS on; http, `shaosiyuan.com` and the old test address all redirect there. url_test 190/190 on the live domain. Squarespace website plan kept as the undo until about mid-October, then cancel the website plan only (not the domain) |
+| Archive | Private repository `shaosyucla/shaosiyuan.com-archive` (local folder `website-archive` next to this one): Squarespace WordPress export and its images, raw pages, live screenshots, test caches for `--skip-live`, notes, rebuild snapshot |
 
 ## 1a. DNS (Squarespace → Domains → shaosiyuan.com → DNS → DNS Settings)
 
