@@ -13,7 +13,44 @@ check the copy against the live Squarespace site. Paths are absolute; the projec
 | Repository | `https://github.com/shaosyucla/shaosiyuan.com` (public). Local clone = the project root |
 | Test address | `https://shaosyucla.github.io/shaosiyuan.com/` (GitHub Pages, Actions workflow publishes `site/` on every push to `main`) |
 | Domain | `shaosiyuan.com` at Squarespace Domains, renews 2027-09-16, auto-renew ON. GitHub domain verification TXT record added and verified. DNS still points to Squarespace |
-| Going live | 2026-10-01: custom domain `www.shaosiyuan.com` set in GitHub Pages (verified). Owner switches DNS in Squarespace (delete Squarespace Defaults; A @ → 185.199.108–111.153; CNAME www → shaosyucla.github.io). Then: Enforce HTTPS, re-test, cancel the Squarespace website plan (not the domain) after 1–2 weeks |
+| Going live | 2026-10-01: custom domain `www.shaosiyuan.com` set in GitHub Pages (verified). Owner switches DNS in Squarespace (section 1a). Then: Enforce HTTPS, re-test, cancel the Squarespace website plan (not the domain) after 1–2 weeks |
+
+## 1a. DNS (Squarespace → Domains → shaosiyuan.com → DNS → DNS Settings)
+
+Records BEFORE the switch (owner's screenshot and public DNS lookup, 2026-10-01). Keep this table: it is the undo.
+
+| Section | Type | Name | TTL | Data |
+|---|---|---|---|---|
+| Preset "Squarespace Defaults" | A | @ | 4 hrs | 198.185.159.144 |
+| | A | @ | 4 hrs | 198.185.159.145 |
+| | A | @ | 4 hrs | 198.49.23.144 |
+| | A | @ | 4 hrs | 198.49.23.145 |
+| | CNAME | www | 4 hrs | ext-sq.squarespace.com |
+| Preset "Squarespace Domain Connect" | CNAME | _domainconnect | 1 hr | _domainconnect.domains.squarespace.com (shown shortened) |
+| Custom records | TXT | _github-pages-challenge-shaosyucla | 4 hrs | 530dbc4f0c5803c5dc7fb8f6b67093 (GitHub domain verification) |
+
+No MX records: the domain has no email, so nothing mail-related can break. Name servers: Squarespace (ns01–04.squarespacedns.com) and NS1 (dns1–4.p05.nsone.net).
+
+Records AFTER the switch (GitHub Pages):
+
+| Section | Type | Name | Data |
+|---|---|---|---|
+| Custom records (ADD RECORD) | A | @ | 185.199.108.153 |
+| | A | @ | 185.199.109.153 |
+| | A | @ | 185.199.110.153 |
+| | A | @ | 185.199.111.153 |
+| | CNAME | www | shaosyucla.github.io |
+| optional (IPv6) | AAAA | @ | 2606:50c0:8000::153, 2606:50c0:8001::153, 2606:50c0:8002::153, 2606:50c0:8003::153 |
+| keep | TXT | _github-pages-challenge-shaosyucla | (unchanged) |
+| keep | preset | Squarespace Domain Connect | (unchanged; lets Squarespace manage the domain) |
+
+Order: add the 4 A records (ADD RECORD) → delete the "Squarespace Defaults" preset (trash icon) → add the `www` CNAME.
+A name can hold only one CNAME, so the `www` record can only go in after the defaults are gone. Do not leave both sets
+of A records: visitors would land on either host at random and GitHub's certificate check fails.
+Old answers stay cached up to the 4-hour TTL; both sites look the same, so that is harmless.
+
+Undo: delete the GitHub A/AAAA records and the `www` CNAME, then ADD PRESET → Squarespace Defaults (or add the five
+records in the BEFORE table by hand). Works while the Squarespace website plan is still active.
 
 ## 2. Project layout and edit loop
 
