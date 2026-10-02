@@ -520,3 +520,21 @@ li > p { margin: 0 0 10px; }
   .site-header { padding: 23px var(--gutter); }
   .site-nav { gap: 22px; }
 }
+
+/* ------------------------------------------------------------ round 3 (final review) */
+.gallery-section figcaption p { margin: 0; }                        /* gallery captions: no paragraph margin */
+.cards.grid { row-gap: 65px; }                                       /* Squarespace .blog-basic-grid { grid-row-gap: 65px } */
+.collage figcaption div + div { margin-top: 15px; }                  /* caption card: label and text 15px apart */
+.blk.float-right { margin-left: 17px; }                              /* Squarespace floats: margin 17px on the text side */
+.blk.float-left { margin-right: 17px; }
+@media (max-width: 767px) {
+  .map { margin: 0; aspect-ratio: 100 / 58.5; }                      /* map stays in the text column */
+  .section-inner > .row:last-child .col:last-child .blk:last-child { padding-bottom: 17px; }
+  .site-footer { padding: 43.8px var(--gutter); }                    /* 26.8px section + 17px block padding */
+  .menu-toggle span:first-child, .menu-toggle span:last-child { top: 17.5px; }
+  .menu-toggle span:first-child { transform: translateY(-5.5px); }
+  .menu-toggle span:last-child { transform: translateY(5.5px); }
+  .menu-open .menu-toggle span { left: 10px; right: 10px; }
+  .menu-open .menu-toggle span:first-child { transform: rotate(45deg); }
+  .menu-open .menu-toggle span:last-child { transform: rotate(-45deg); }
+}

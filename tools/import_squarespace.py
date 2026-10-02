@@ -482,7 +482,10 @@ def section_open(a, extra_class=''):
     style = ' style="%s"' % ';'.join(props) if props else ''
     head = '<section class="%s"%s>' % (' '.join(cls), style)
     if a.get('bg'):
-        focal = ' data-focal="%s"' % a['focal'] if a.get('focal') and a['focal'] != '0.5,0.5' else ''
+        focal = ''
+        if a.get('focal') and a['focal'] != '0.5,0.5':
+            fx, fy = (float(v) for v in a['focal'].split(','))
+            focal = ' style="object-position:%.4g%% %.4g%%"' % (fx * 100, fy * 100)
         head += '\n  <img class="section-bg" src="%s" alt=""%s>' % (a['bg'], focal)
     return head
 
@@ -579,7 +582,7 @@ def main():
     for name in PLAIN + COLLECTIONS:
         title, header_theme, body = convert_page(name)
         title = title.split(' — ')[0] if ' — ' in title else title
-        meta = {'title': re.sub(r'\s+\d+$', '', title), 'header': header_theme}
+        meta = {'title': title, 'header': header_theme}
         if convert_page.description:   # SEO / share description set in Squarespace
             meta['description'] = convert_page.description
         if name in COLLECTIONS:
@@ -609,6 +612,11 @@ def main():
                 'thumbnail': asset(it.get('assetUrl')),
                 'excerpt': exc_html,
             }
+            seo = it.get('seoData') or {}
+            if (seo.get('seoTitle') or '').strip() and seo['seoTitle'].strip() != meta['title']:
+                meta['seoTitle'] = seo['seoTitle'].strip()
+            if (seo.get('seoDescription') or '').strip():
+                meta['description'] = seo['seoDescription'].strip()
             if it.get('categories'):
                 meta['categories'] = it['categories']
             write(os.path.join(SRC, 'posts', col, it['urlId'] + '.html'), meta_comment(meta) + body + '\n')

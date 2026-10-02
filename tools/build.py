@@ -267,7 +267,7 @@ class Site:
             chosen = [p for p in posts if cat in p.get('categories', [])]
             page_body = body.replace('<!-- collection-list -->', self.list_html(chosen, meta.get('list', '')))
             out = '%s/category/%s.html' % (name, cat_file(cat))
-            self.render(out, '%s — %s' % (meta.get('title', name), cat), page_body, meta.get('header', 'white'),
+            self.render(out, '%s — %s' % (cat, meta.get('title', name)), page_body, meta.get('header', 'white'),
                         href, 'is-page page-' + name, text_of(page_body))
 
     def redirect(self, alias, target):
@@ -301,8 +301,8 @@ class Site:
 </article>
 %s''' % (' has-cats' if p.get('categories') else '', self.categories_html(p, 'post-cat'), p['date'], fmt(p['date'], self.cfg['postDateFormat']),
                 htmllib.escape(p['title'], quote=False), p['body'].strip(), pag)
-            self.render('%s/%s.html' % (col, p['slug']), p['title'], content, 'white', col_href,
-                        'is-post post-' + col, text_of(p.get('excerpt') or p['body']),
+            self.render('%s/%s.html' % (col, p['slug']), p.get('seoTitle') or p['title'], content, 'white', col_href,
+                        'is-post post-' + col, p.get('description') or text_of(p.get('excerpt') or p['body']),
                         image=p.get('thumbnail', ''), og_type='article')
 
 
