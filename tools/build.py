@@ -232,7 +232,8 @@ class Site:
     def clean(self):
         """Remove every generated .html in site/ (all of them come from src/), so renamed pages leave no stale copies."""
         for dirpath, dirs, files in os.walk(SITE):
-            dirs[:] = [d for d in dirs if d not in ('img', 's', 'files', 'css', 'js')]
+            # starbucks-map holds a page that is not made from src/ (published by another tool): keep it
+            dirs[:] = [d for d in dirs if d not in ('img', 's', 'files', 'css', 'js', 'starbucks-map')]
             for f in files:
                 if f.endswith('.html'):
                     os.remove(os.path.join(dirpath, f))
