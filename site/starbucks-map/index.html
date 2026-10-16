@@ -466,7 +466,11 @@ let curMarker = null, pinned = false, hideT = null;
 
 function publicCardHtml(s) {        // read-only card of the public copy: no rating, no buttons, no Google link
   const mk = marks[s.pid];
-  const osm = 'https://www.openstreetmap.org/?mlat=' + s.lat + '&mlon=' + s.lng + '#map=18/' + s.lat + '/' + s.lng;
+  // A plain link to Google Maps (documented "Maps URLs", no API key, no Google data on this page).
+  // The search text comes from this page's own address; without a usable address it is the coordinates.
+  const place = [s.addr, s.city, s.zip].filter(Boolean).join(', ');
+  const gmap = 'https://www.google.com/maps/search/?api=1&query=' +
+    encodeURIComponent(s.addr && (s.city || s.zip) ? 'Starbucks, ' + place : s.lat + ',' + s.lng);
   return '<div class="tip-name">' + esc(s.name) + '</div>' +
     (s.addr ? '<div class="tip-addr">' + esc(s.addr) + '</div>' : '') +
     (s.city ? '<div class="tip-meta">' + esc(s.city) + '</div>' : '') +
@@ -474,7 +478,7 @@ function publicCardHtml(s) {        // read-only card of the public copy: no rat
     '<div class="tip-meta" style="margin-top:6px">' + (mk
       ? '<b style="color:' + (mk.s === 'investigate' ? '#c98500' : MARK_COL[mk.s]) + '">' + MARK_LABEL[mk.s] + '</b>'
       : 'Not marked') + '</div>' +
-    '<div class="tip-meta" style="margin-top:6px"><a target="_blank" rel="noopener" href="' + osm + '">Open in OpenStreetMap</a></div>';
+    '<div class="tip-meta" style="margin-top:6px"><a target="_blank" rel="noopener noreferrer" href="' + gmap + '">Open in Google Maps</a></div>';
 }
 function cardHtml(s) {
   if (PUBLIC) return publicCardHtml(s);
@@ -714,13 +718,7 @@ function schedule() { if (!queued) { queued = true; requestAnimationFrame(() => 
 thr.addEventListener('input', schedule);
 rev.addEventListener('input', schedule);
 hide.addEventListener('change', schedule);
-onlyOk.addEventListener('change', () => {
-  schedule();
-  if (onlyOk.checked) {      // zoom to the stores in my list
-    const pts = markers.filter(m => marks[m.store.pid]).map(m => m.getLatLng());
-    if (pts.length) map.fitBounds(L.latLngBounds(pts).pad(0.2), { maxZoom: 14, animate: false });
-  }
-});
+onlyOk.addEventListener('change', schedule);   // only the filter changes; the map view stays where it is
 document.getElementById('fit').addEventListener('click', () =>
   map.fitBounds(L.latLngBounds(STORES.map(a => [a[0], a[1]])).pad(0.05)));
 
