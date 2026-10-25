@@ -10,11 +10,10 @@
 :root{color-scheme:light;--ink:#0b0b0b;--mut:#5f5e5a;--line:#d8d6d0;--bg:#fcfcfb;--bk:#e8590c;--ts:#e31937;--acc:#0a66c2}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font:16px/1.35 -apple-system,system-ui,"Segoe UI",sans-serif;-webkit-text-size-adjust:100%}
-#map{position:fixed;top:0;left:0;right:0;height:66.67vh;height:66.67dvh;background:#dfe6ea;touch-action:none}
-#sheet{position:fixed;left:0;right:0;top:66.67vh;top:66.67dvh;bottom:0;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;background:var(--bg);border-top:1px solid var(--line);
+#map{position:fixed;top:0;left:0;right:0;bottom:0;height:100vh;height:100dvh;background:#dfe6ea;touch-action:none}
+#sheet{display:none;position:fixed;left:0;right:0;top:0;bottom:0;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;background:var(--bg);border-top:1px solid var(--line);
   padding:10px 14px calc(14px + env(safe-area-inset-bottom)) 14px;padding-left:max(14px,env(safe-area-inset-left));padding-right:max(14px,env(safe-area-inset-right))}
-@media(min-width:760px){#map{right:380px;height:auto;bottom:0}#sheet{top:0;left:auto;width:380px;border-top:0;border-left:1px solid var(--line)}}
-body.nomap #map{display:none}body.nomap #sheet{top:0}
+body.nomap #map,body.nomap #legend,body.nomap #loc{display:none}body.nomap #sheet{display:block}
 h1{font-size:18px;margin:0 0 2px}.sub{color:var(--mut);font-size:14px;margin:0 0 8px}
 .leg{display:flex;gap:6px 14px;flex-wrap:wrap;font-size:13px;color:var(--mut);margin:0 0 6px}.leg i{display:inline-block;width:12px;height:12px;border-radius:50%;vertical-align:-1px;margin-right:5px}
 .card{border-top:1px solid var(--line);padding:12px 2px}.card:first-of-type{border-top:0}
@@ -30,10 +29,13 @@ h1{font-size:18px;margin:0 0 2px}.sub{color:var(--mut);font-size:14px;margin:0 0
 .leaflet-popup-content{margin:12px 14px;font-size:15px}.leaflet-popup-content-wrapper{border-radius:12px}
 .leaflet-container a.leaflet-popup-close-button{width:40px;height:40px;font-size:26px;line-height:40px;padding:0;text-align:center}
 .pop b{font-size:16px}.pop .m{color:var(--mut);font-size:14px}
+#legend{position:absolute;z-index:1000;left:10px;bottom:calc(32px + env(safe-area-inset-bottom));max-width:min(80vw,310px);background:rgba(255,255,255,.95);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:13px;line-height:1.3;cursor:pointer}
+#legend b{font-size:14px}#legend .l{display:flex;align-items:flex-start;gap:6px;margin-top:4px}#legend .l i{flex:none;width:12px;height:12px;border-radius:50%;margin-top:2px}#legend.min .l,#legend.min .s{display:none}
+.cl{margin-top:6px;padding:6px 8px;border-radius:8px;background:#fdf1f2;font-size:14px}
 #loc{position:absolute;z-index:1000;top:10px;left:64px;min-height:44px;padding:0 14px;background:#fff;border:1px solid #bbb;border-radius:10px;font:600 15px system-ui,sans-serif;cursor:pointer}
 .note{color:var(--mut);font-size:13px;margin:12px 0 0}
 </style></head><body>
-<div id="map"></div><button id="loc" type="button" hidden>My location</button>
+<div id="map"></div><div id="legend"></div><button id="loc" type="button" hidden>My location</button>
 <div id="sheet"><h1>Sherman Oaks to UCSB on US-101</h1><p class="sub" id="sub"></p>
 <div class="leg"><span><i style="background:var(--bk)"></i>Burger King (numbered along the route)</span><span><i style="background:var(--ts)"></i>Tesla Supercharger</span><span><i style="background:#2563eb"></i>route</span></div>
 <div id="list"></div>
@@ -63,18 +65,23 @@ function startMap() {
   const fit = () => { map.invalidateSize(); if (map.getSize().x > 0) { map.fitBounds(routeLine.getBounds().pad(0.08)); fitted = true; } };
   fit(); new ResizeObserver(() => { if (!fitted) fit(); else map.invalidateSize(); }).observe(document.getElementById('map'));
   const BOLT = '<svg viewBox="0 0 24 24" width="34" height="34"><circle cx="12" cy="12" r="11" fill="#fff" stroke="#e31937" stroke-width="1.8"/><path d="M13.4 2.6 5.9 13.3h4.9l-1 8.1 8.3-11.2h-5.1z" fill="#e31937"/></svg>';
+  const byCh = {};
+  T.stops.forEach(s => s.ch.forEach(c => { (byCh[c[0]] = byCh[c[0]] || []).push([s.i, c[1], c[2]]); }));
   T.stops.forEach(s => s.ch.forEach(c => { const h = T.chargers[c[0]]; L.polyline([[s.lat, s.lng], [h.lat, h.lng]], { color: '#e31937', weight: 2, opacity: .6, dashArray: '4 6' }).addTo(map); }));
-  T.chargers.forEach(c => {
+  T.chargers.forEach((c, ci) => {
     L.marker([c.lat, c.lng], { icon: L.divIcon({ className: 'tsi', html: BOLT, iconSize: [34, 34], iconAnchor: [17, 17] }), zIndexOffset: 200 }).addTo(map)
-      .bindPopup('<div class="pop"><b>' + esc(c.n) + '</b><div class="m">Tesla Supercharger · ' + c.s + ' stalls' + (c.k ? ' · ' + c.k + ' kW' : '') + '</div></div>' + navHtml('Tesla Supercharger, ' + c.a), { maxWidth: 260 });
+      .bindPopup('<div class="pop"><b>' + esc(c.n) + '</b><div class="m">' + esc(c.a) + '<br>Tesla Supercharger · ' + c.s + ' stalls' + (c.k ? ' · ' + c.k + ' kW' : '') + '</div>' + (byCh[ci] || []).map(b => '<div class="cl">From Burger King #' + b[0] + ': ' + b[1] + ' min (' + b[2] + ' mi) by car</div>').join('') + '</div>' + navHtml('Tesla Supercharger, ' + c.a), { maxWidth: 270, maxHeight: 320 });
   });
   T.stops.forEach(s => {
     bkMk[s.i] = L.marker([s.lat, s.lng], { icon: L.divIcon({ className: '', html: '<div class="bn">' + s.i + '</div>', iconSize: [34, 34], iconAnchor: [17, 17] }), zIndexOffset: 400 }).addTo(map)
-      .bindPopup('<div class="pop"><b>Burger King #' + s.i + '</b><div class="m">' + esc(s.a) + '<br>detour ' + s.det + ' min</div></div>' + navHtml('Burger King, ' + s.a), { maxWidth: 260 });
+      .bindPopup('<div class="pop"><b>Burger King #' + s.i + '</b><div class="m">' + esc(s.a) + '<br>mile ' + s.mile + ' from Sherman Oaks · detour ' + s.det + ' min</div>' + (s.ch.length ? s.ch.map(c => { const h = T.chargers[c[0]]; return '<div class="cl"><b>' + esc(h.n) + '</b><br>Tesla Supercharger · ' + (h.k ? h.k + ' kW · ' : '') + h.s + ' stalls<br>' + c[1] + ' min (' + c[2] + ' mi) by car</div>'; }).join('') : '<div class="cl">No Supercharger within 10 minutes</div>') + '</div>' + navHtml('Burger King, ' + s.a), { maxWidth: 270, maxHeight: 320 });
     bkMk[s.i].on('click', () => { const el = document.getElementById('c' + s.i); if (el) el.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); });
   });
   [[T.O, 'Sherman Oaks (start)'], [T.D, 'UCSB (end)']].forEach(([p, t]) => L.circleMarker(p, { radius: 8, color: '#fff', weight: 2, fillColor: '#111', fillOpacity: 1 }).addTo(map)
     .bindTooltip(t, { permanent: true, direction: 'top', offset: [0, -8] }));
+  const lg = document.getElementById('legend');
+  lg.innerHTML = '<b>Sherman Oaks to UCSB · US-101</b><div class="s" style="color:#5f5e5a">' + T.miles + ' mi, about ' + T.min + ' min</div><div class="l"><i style="background:#e8590c"></i>Burger King, numbered along the route</div><div class="l"><i style="background:#e31937"></i>Tesla Supercharger (closest; faster 151+ kW too if the closest is slower)</div><div class="l"><i style="background:#2563eb"></i>route</div>';
+  lg.addEventListener('click', () => lg.classList.toggle('min'));
   if (navigator.geolocation) {
     const b = document.getElementById('loc'); b.hidden = false;
     b.addEventListener('click', () => navigator.geolocation.getCurrentPosition(p => {
