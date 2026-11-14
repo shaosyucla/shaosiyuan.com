@@ -114,6 +114,25 @@
   .mk.no.on { background: var(--bad); border-color: var(--bad); color: #fff; }
   .mk.check.on { background: var(--warn); border-color: #e0a000; color: #1a1400; }
   .mk.on .ic { color: inherit; }
+  /* public page only: mark buttons big enough for a finger, the Copy marks button and its dialog */
+  body.public .mk { min-height: 48px; justify-content: center; font-size: 12px; touch-action: manipulation; }
+  body:not(.public) .pubonly { display: none !important; }
+  body.public #copyMarks { min-height: 44px; font-weight: 600; touch-action: manipulation; }
+  #copyDlg { position: fixed; inset: 0; z-index: 3000; display: none; align-items: center; justify-content: center;
+    background: rgba(8,8,8,.45); padding: 16px; }
+  #copyDlg.show { display: flex; }
+  #copyDlg .box { width: 100%; max-width: 460px; background: var(--surface); border-radius: 10px; padding: 14px;
+    box-shadow: 0 4px 20px rgba(0,0,0,.3); }
+  #copyDlg p { margin: 0 0 8px; font-size: 14px; }
+  #copyText { width: 100%; height: 40vh; font: 12px/1.35 ui-monospace, Consolas, monospace; padding: 6px;
+    border: 1px solid var(--hairline); border-radius: 6px; resize: vertical; }
+  #copyDlg .btn { min-height: 44px; }
+  /* public page with sync on: marks go to the sync server; Copy marks is only a small "copy instead" link */
+  body.sync #copyMarks, body:not(.sync) .synconly { display: none !important; }
+  #copyInstead { display: inline-block; margin-top: 4px; padding: 4px 0; font-size: 11px; color: #256abf;
+    background: none; border: 0; text-decoration: underline; cursor: pointer; font-family: inherit; }
+  body.sync #marksNote { font-size: 12px; color: var(--ink-2); }
+  body.sync #marksNote.bad { color: var(--bad); }
 
   .btn.photos { margin-top: 6px; padding: 5px 8px; font-weight: 600; }
 
@@ -184,6 +203,13 @@
 <div id="map"></div>
 <div id="card" role="dialog" aria-label="Store details"></div>
 <div id="toast" role="status"></div>
+<div id="copyDlg" class="pubonly" role="dialog" aria-modal="true" aria-label="Copy marks">
+  <div class="box">
+    <p>Copying did not work in this browser. Long-press the text, choose Select All, then Copy.</p>
+    <textarea id="copyText" readonly></textarea>
+    <button class="btn" id="copyClose" type="button">Close</button>
+  </div>
+</div>
 
 <div id="photoView" aria-label="Store photos">
   <div class="pv-head">
@@ -204,7 +230,7 @@
 
 <div id="panel">
   <h1>Starbucks in LA County</h1>
-  <p class="sub">519 Starbucks · my marks as of 2026-10-23<br>Store points: OpenStreetMap (2026-10-24) · EV chargers: US DOE (2026-10-16)</p>
+  <p class="sub">519 Starbucks · my marks as of 2026-11-14<br>Store points: OpenStreetMap (2026-10-24) · EV chargers: US DOE (2026-10-16)</p>
 
   <label class="chk only-ok"><input type="checkbox" id="onlyOk"> <span class="trio"><b class="okc">✓</b><b class="noc">✕</b><b class="chc">?</b></span> Show my list <span class="okn">(<span id="nOk2">0</span> marked)</span></label>
   <label class="chk ev-chk"><input type="checkbox" id="evOn"> <span id="evIcon" style="display:inline-flex"></span> <span style="white-space:nowrap">EV Charger</span> <span class="okn">(<span id="nEv">0</span> near my ✓ stores)</span></label>
@@ -240,7 +266,9 @@
     <div class="line" style="margin-top:4px"><span class="ringkey check"></span>? to investigate <b id="nCheck">0</b> <span class="okn">· ½ diameter</span></div>
     <div class="line" style="margin-top:6px"><span id="evKey" style="display:inline-flex;width:14px;justify-content:center"></span>EV charger within 0.25 mi of a ✓ store (4 kW or more)</div>
     <button class="btn loc" id="export" type="button">Export marks (CSV)</button>
-    <div id="marksNote"></div>
+    <button class="btn pubonly" id="copyMarks" type="button" disabled>Copy marks (0)</button>
+    <div id="marksNote" role="status"></div>
+    <button class="pubonly synconly" id="copyInstead" type="button">copy instead</button>
   </div>
 
   <div class="legend srv">
@@ -272,6 +300,12 @@ const SEED_MARKS = {"n14006728072":{"s":"confirmed","t":""},"w471859805":{"s":"c
 // true on the public copy (read-only, no Google data), built by build_map.py --public
 const PUBLIC = true;
 if (PUBLIC) document.body.classList.add('public');
+// Public page only: address of the sync server (a Cloudflare Worker) and its write key, from sync_config.json.
+// Empty = sync off. The write key is public by design; the Worker only uses it to stop casual junk.
+const SYNC_URL = "https://starbucks-marks.shaosy.workers.dev";
+const SYNC_KEY = "YsXl5TH_G-IjdTshmPcl3uIO";
+const SYNC_ON = PUBLIC && !!SYNC_URL;
+if (SYNC_ON) document.body.classList.add('sync');
 
 const RAMP = ['#9ec5f4', '#6da7ec', '#3987e5', '#256abf', '#184f95', '#0d366b']; // rating 3.5 .. 5.0
 const GREY = '#a3a199';
@@ -355,7 +389,7 @@ let saveMode = 'browser';  // 'server' or 'browser'
 let photosEnabled = false; // the server switches the Google photo API on only when started with start_map_PHOTOS_ON.bat
 
 async function loadMarks() {
-  if (PUBLIC) { marks = JSON.parse(JSON.stringify(SEED_MARKS)); saveMode = 'public'; return; }
+  if (PUBLIC) { loadPublicMarks(); saveMode = 'public'; return; }
   try {
     const r = await fetch('/api/marks', { headers: { 'X-Marks': '1' } });
     if ((r.headers.get('content-type') || '').indexOf('json') >= 0 && r.ok) {
@@ -373,6 +407,7 @@ function toast(msg) {
   clearTimeout(toastT); toastT = setTimeout(() => { t.style.display = 'none'; }, 4000);
 }
 async function persist(store, status) {
+  if (PUBLIC) { persistPublic(store, status); return; }
   if (saveMode === 'server') {
     try {
       const r = await fetch('/api/mark', { method: 'POST',
@@ -403,8 +438,10 @@ function updateMarkCounts() {
   document.getElementById('nOk2').textContent = n.confirmed + n.denied + n.investigate;
   document.getElementById('nNo').textContent = n.denied;
   document.getElementById('nCheck').textContent = n.investigate;
+  if (SYNC_ON && saveMode === 'public') { syncShow(); return; }
   document.getElementById('marksNote').textContent = saveMode === 'public'
-    ? 'Read-only copy. The marks are published from the PC that owns them.'
+    ? (pubStorageOk ? 'Marks you set here are saved in this browser only. Press Copy marks to send them.'
+                    : 'This browser cannot save marks. Press Copy marks before you close the page.')
     : saveMode === 'server'
     ? 'Saving to store_marks.csv on the PC that runs marks_server.py.'
     : 'Saving in this browser only. Press "Export marks" to get a file.';
@@ -420,6 +457,234 @@ document.getElementById('export').addEventListener('click', () => {
   document.body.appendChild(link); link.click(); link.remove();
   setTimeout(() => URL.revokeObjectURL(link.href), 2000);
 });
+
+// ---------- public page only: marks set on this device, and the Copy marks button ----------
+// The owner's published marks (SEED_MARKS) stay read-only. Only the changes made on this device are kept,
+// in this browser: { publicStoreId: { s: 'confirmed'|'denied'|'investigate'|'cleared', t: ISO time } }.
+// The mark shown = SEED_MARKS with these changes on top. 'cleared' = a published mark removed here.
+const PUB_DELTA_KEY = 'starbucks_la_public_delta_v1';
+const PUB_STATES = { confirmed: 1, denied: 1, investigate: 1, cleared: 1 };
+let pubDelta = {};
+let pubStorageOk = true;     // false when this browser blocks localStorage (for example Safari private mode)
+function isoLocal(d) {       // 2026-11-14T09:05:03-08:00 (same form as store_marks.csv)
+  d = d || new Date();
+  const p = n => String(Math.floor(Math.abs(n))).padStart(2, '0'), off = -d.getTimezoneOffset();
+  return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) + 'T' + p(d.getHours()) + ':' +
+    p(d.getMinutes()) + ':' + p(d.getSeconds()) + (off >= 0 ? '+' : '-') + p(off / 60) + ':' + p(off % 60);
+}
+function pubSameAsSeed(id, e) {
+  const sd = SEED_MARKS[id];
+  return e.s === 'cleared' ? !sd : !!sd && sd.s === e.s;
+}
+function savePubDelta() {
+  if (!pubStorageOk) return;
+  try { localStorage.setItem(PUB_DELTA_KEY, JSON.stringify(pubDelta)); }
+  catch (e) { pubStorageOk = false; pubStorageWarn(); }
+}
+let pubWarned = false;
+function pubStorageWarn() {
+  if (!pubWarned) {
+    pubWarned = true;
+    toast(SYNC_ON ? 'This browser cannot save marks. Each mark is sent at once. Keep the page open until it says Sent.'
+                  : 'This browser cannot save marks. Press Copy marks before you close the page.');
+  }
+  if (saveMode === 'public') updateMarkCounts();
+}
+function loadPublicMarks() {
+  let raw = null;
+  try { raw = localStorage.getItem(PUB_DELTA_KEY); } catch (e) { pubStorageOk = false; }
+  let d = {};
+  try { d = raw ? JSON.parse(raw) : {}; } catch (e) { d = {}; }
+  pubDelta = {};
+  let dropped = false;
+  Object.keys(d && typeof d === 'object' ? d : {}).forEach(id => {
+    const e = d[id];
+    if (!e || !PUB_STATES[e.s] || !STORE_BY_PID[id] || pubSameAsSeed(id, e)) { dropped = true; return; }
+    pubDelta[id] = { s: e.s, t: String(e.t || '') };
+  });
+  if (dropped) savePubDelta();
+  marks = JSON.parse(JSON.stringify(SEED_MARKS));
+  Object.keys(pubDelta).forEach(id => {
+    if (pubDelta[id].s === 'cleared') delete marks[id]; else marks[id] = { s: pubDelta[id].s, t: pubDelta[id].t };
+  });
+  if (SYNC_ON) outboxLoad();
+  if (!pubStorageOk) setTimeout(pubStorageWarn, 0);
+  updateCopyBtn();
+}
+function persistPublic(store, status) {      // called by persist() after setMark() changed marks[]
+  const id = store.pid, e = { s: status || 'cleared', t: isoLocal() };
+  if (pubSameAsSeed(id, e)) delete pubDelta[id]; else pubDelta[id] = e;
+  savePubDelta();
+  updateCopyBtn();
+  if (SYNC_ON) { outboxAdd(id, status || 'cleared'); syncKick(); }
+  if (curMarker && curMarker.store.pid === id) renderCard(curMarker);   // card shows "changed on this device"
+}
+function updateCopyBtn() {
+  const b = document.getElementById('copyMarks'), n = Object.keys(pubDelta).length;
+  b.textContent = 'Copy marks (' + n + ')';
+  b.disabled = n === 0;
+}
+function pubCopyText() {
+  const rows = [['public_id', 'lat', 'lon', 'name', 'address', 'city', 'status', 'marked_at']];
+  Object.keys(pubDelta).sort().forEach(id => {
+    const a = STORE_BY_PID[id];
+    if (a) rows.push([id, a[0], a[1], a[4], a[5], a[6], pubDelta[id].s, pubDelta[id].t]);
+  });
+  return '# Starbucks LA public-page marks, copied ' + isoLocal() + '\n' + rows.map(r => r.map(csvCell).join(',')).join('\n') + '\n';
+}
+function copyByTextarea(text) {
+  const ta = document.createElement('textarea');
+  ta.value = text; ta.setAttribute('readonly', '');
+  ta.style.position = 'fixed'; ta.style.top = '0'; ta.style.left = '-9999px'; ta.style.fontSize = '16px';
+  document.body.appendChild(ta);
+  ta.select(); ta.setSelectionRange(0, text.length);
+  let ok = false;
+  try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+  ta.remove();
+  return ok;
+}
+function showCopyDialog(text) {
+  const ta = document.getElementById('copyText');
+  ta.value = text;
+  document.getElementById('copyDlg').classList.add('show');
+  ta.focus(); ta.select(); ta.setSelectionRange(0, text.length);
+}
+function copyMarksNow() {
+  const n = Object.keys(pubDelta).length;
+  if (!n) { if (SYNC_ON) toast('No marks changed on this device.'); return; }
+  const text = pubCopyText(), done = () => toast('Copied ' + n + ' mark' + (n === 1 ? '' : 's'));
+  const fallback = () => { if (copyByTextarea(text)) done(); else showCopyDialog(text); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    let p;
+    try { p = navigator.clipboard.writeText(text); } catch (e) { p = Promise.reject(e); }
+    Promise.resolve(p).then(done, fallback);
+  } else fallback();
+}
+if (PUBLIC) {
+  document.getElementById('copyMarks').addEventListener('click', copyMarksNow);
+  document.getElementById('copyInstead').addEventListener('click', copyMarksNow);
+  document.getElementById('copyClose').addEventListener('click', () => document.getElementById('copyDlg').classList.remove('show'));
+}
+
+// ---------- public page with sync on: send each mark to the sync server ----------
+// Outbox in this browser: { publicStoreId: { id, lat, lon, name, addr, status, t, n } }, newest change per store.
+// status 'cleared' = the mark was removed. t = local ISO time with milliseconds. n = order number (time in ms).
+// One POST at a time, oldest first. 200 with ok:true: done. 4xx: dropped with a message. Network error, 5xx or
+// timeout: kept and sent again on page load, when the phone goes online, when the page shows again, and every 30 s.
+const OUTBOX_KEY = 'starbucks_la_public_outbox_v1';
+const SYNC_TIMEOUT_MS = 15000, SYNC_RETRY_MS = 30000;
+let outbox = {};
+let syncBusy = false, syncTimer = null, syncSentT = null, syncLastN = 0;
+let syncState = 'idle';      // idle | sent | waiting (5xx) | offline (no answer) | rejected (4xx)
+let syncRejectText = '';
+function isoLocalMs(ms) {    // 2026-11-14T09:05:03.250-08:00
+  const s = isoLocal(new Date(ms));
+  return s.slice(0, 19) + '.' + String(ms % 1000).padStart(3, '0') + s.slice(19);
+}
+function outboxLoad() {
+  let raw = null;
+  try { raw = localStorage.getItem(OUTBOX_KEY); } catch (e) { pubStorageOk = false; }
+  let o = {};
+  try { o = raw ? JSON.parse(raw) : {}; } catch (e) { o = {}; }
+  outbox = {};
+  Object.keys(o && typeof o === 'object' ? o : {}).forEach(id => {
+    const r = o[id];
+    if (r && r.id === id && PUB_STATES[r.status] && typeof r.t === 'string' && isFinite(r.n)) {
+      outbox[id] = r;
+      syncLastN = Math.max(syncLastN, r.n);
+    }
+  });
+}
+function outboxSave() {
+  if (!pubStorageOk) return;
+  try { localStorage.setItem(OUTBOX_KEY, JSON.stringify(outbox)); }
+  catch (e) { pubStorageOk = false; pubStorageWarn(); }
+}
+function outboxAdd(id, status) {
+  const a = STORE_BY_PID[id];
+  if (!a) return;
+  const n = Math.max(Date.now(), syncLastN + 1);      // strictly increasing, so two quick taps keep their order
+  syncLastN = n;
+  outbox[id] = { id: id, lat: a[0], lon: a[1], name: String(a[4] || '').slice(0, 80),
+    addr: (String(a[5] || '') + ', ' + String(a[6] || '')).slice(0, 120), status: status, t: isoLocalMs(n), n: n };
+  if (syncState === 'rejected') syncState = 'idle';
+  outboxSave();
+  syncShow();
+}
+function syncNoteText() {
+  const n = Object.keys(outbox).length;
+  if (syncState === 'rejected') return syncRejectText;
+  if (n && syncState === 'offline') return 'Could not reach the sync server. ' + (pubStorageOk
+    ? 'Marks are saved in this browser and will be sent later.'
+    : 'This browser cannot save marks. Keep the page open; they will be sent later.');
+  if (n && syncState === 'waiting') return n + ' waiting to send. Will retry.';
+  if (n) return 'Sending ' + n + '...';
+  if (syncState === 'sent') return 'Sent.';
+  return pubStorageOk ? 'Marks go to your PC automatically.'
+                      : 'Marks go to your PC automatically. This browser cannot save them, so keep the page open until it says Sent.';
+}
+function syncShow() {
+  const el = document.getElementById('marksNote');
+  el.textContent = syncNoteText();
+  el.classList.toggle('bad', syncState === 'rejected' || (syncState === 'offline' && Object.keys(outbox).length > 0));
+}
+function syncTimerOn(on) {
+  if (on && !syncTimer) syncTimer = setInterval(syncKick, SYNC_RETRY_MS);
+  if (!on && syncTimer) { clearInterval(syncTimer); syncTimer = null; }
+}
+function syncDone(rec) {     // remove the record unless a newer change of the same store came in meanwhile
+  if (outbox[rec.id] && outbox[rec.id].n === rec.n) { delete outbox[rec.id]; outboxSave(); }
+}
+function syncKick() {
+  if (!SYNC_ON || syncBusy) return;
+  const recs = Object.keys(outbox).map(k => outbox[k]).sort((x, y) => x.n - y.n);
+  if (!recs.length) { syncTimerOn(false); syncShow(); return; }
+  syncTimerOn(true);
+  const rec = recs[0];
+  const body = JSON.stringify({ key: SYNC_KEY, id: rec.id, lat: rec.lat, lon: rec.lon, name: rec.name, addr: rec.addr,
+    status: rec.status, t: rec.t });
+  const ctl = typeof AbortController === 'function' ? new AbortController() : null;
+  const timer = setTimeout(() => { if (ctl) ctl.abort(); }, SYNC_TIMEOUT_MS);
+  syncBusy = true;
+  let req;
+  try {
+    req = fetch(SYNC_URL + '/mark', { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: body,
+      keepalive: true, mode: 'cors', credentials: 'omit', cache: 'no-store', signal: ctl ? ctl.signal : undefined });
+  } catch (e) { req = Promise.reject(e); }
+  req.then(r => r.text().then(tx => { let j = null; try { j = JSON.parse(tx); } catch (e) { /* not JSON */ } return [r, j]; }))
+    .then(([r, j]) => {
+      clearTimeout(timer); syncBusy = false;
+      if (r.ok && j && j.ok) {
+        syncDone(rec);
+        syncState = 'sent';
+        clearTimeout(syncSentT);
+        syncSentT = setTimeout(() => { if (syncState === 'sent') { syncState = 'idle'; syncShow(); } }, 2000);
+        syncShow();
+        syncKick();
+      } else if ((r.status >= 400 && r.status < 500) || (r.ok && j && j.ok === false)) {
+        syncDone(rec);
+        const why = (j && j.error) ? ': ' + j.error : '';
+        syncState = 'rejected';
+        syncRejectText = 'The sync server refused the mark for ' + (rec.addr || rec.id) + ' (HTTP ' + r.status + why +
+          '). It was not sent. Use "copy instead" for this one.';
+        console.warn('Sync server refused a mark', r.status, j, rec);
+        toast('The sync server refused a mark (HTTP ' + r.status + '). See the note under My marks.');
+        syncShow();
+        syncKick();
+      } else {
+        syncState = 'waiting';
+        syncShow();
+      }
+    }, () => {
+      clearTimeout(timer); syncBusy = false;
+      syncState = 'offline';
+      syncShow();
+    });
+}
+if (SYNC_ON) {
+  window.addEventListener('online', syncKick);
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') syncKick(); });
+}
 
 // ---------- EV chargers (within 0.25 mile of my green stores) ----------
 const STORE_BY_PID = {};
@@ -467,8 +732,11 @@ document.getElementById('evOn').addEventListener('change', e => {   // the map v
 const card = document.getElementById('card');
 let curMarker = null, pinned = false, hideT = null;
 
-function publicCardHtml(s) {        // read-only card of the public copy: no rating, no buttons, no Google link
-  const mk = marks[s.pid];
+function publicCardHtml(s) {        // card of the public copy: no rating, no Google data; mark buttons saved on this device
+  const mk = marks[s.pid], cur = mk ? mk.s : '';
+  const pubBtn = (key, ic, label, cls) => '<button type="button" class="mk ' + cls + (cur === key ? ' on' : '') +
+    '" data-s="' + key + '" aria-pressed="' + (cur === key) + '" aria-label="' + label + '" title="' + label + '">' +
+    '<span class="ic">' + ic + '</span>' + label + '</button>';
   // A plain link to Google Maps (documented "Maps URLs", no API key, no Google data on this page).
   // The search text comes from this page's own address; without a usable address it is the coordinates.
   const place = [s.addr, s.city, s.zip].filter(Boolean).join(', ');
@@ -482,9 +750,11 @@ function publicCardHtml(s) {        // read-only card of the public copy: no rat
       ? '<div class="tip-meta">Regular hours (from OpenStreetMap; holidays not listed)</div>' +
         s.hours.map(h => '<div class="hr"><span>' + esc(h[0]) + '</span><span>' + esc(h[1]) + '</span></div>').join('')
       : '<div class="tip-meta">Hours: not listed in OpenStreetMap</div>') + '</div>' +
-    '<div class="tip-meta" style="margin-top:6px">' + (mk
-      ? '<b style="color:' + (mk.s === 'investigate' ? '#c98500' : MARK_COL[mk.s]) + '">' + MARK_LABEL[mk.s] + '</b>'
-      : 'Not marked') + '</div>' +
+    '<div class="marks">' + pubBtn('confirmed', '✓', 'Confirmed', 'ok') + pubBtn('denied', '✕', 'Denied', 'no') +
+      pubBtn('investigate', '?', 'Investigate', 'check') + '</div>' +
+    '<div class="tip-meta">' + (mk
+      ? '<b style="color:' + (mk.s === 'investigate' ? '#c98500' : MARK_COL[mk.s]) + '">' + MARK_LABEL[mk.s] + '</b> · tap again to clear'
+      : 'Not marked') + (pubDelta[s.pid] ? ' · changed on this device' : '') + '</div>' +
     '<div class="tip-meta" style="margin-top:6px"><a target="_blank" rel="noopener noreferrer" href="' + gmap + '">Open in Google Maps</a></div>';
 }
 function cardHtml(s) {
@@ -733,7 +1003,7 @@ document.getElementById('fit').addEventListener('click', () =>
   map.fitBounds(L.latLngBounds(STORES.map(a => [a[0], a[1]])).pad(0.05)));
 
 // ---------- publish to the public map (local page with the marks server only) ----------
-if (PUBLIC) document.getElementById('marksTitle').textContent = 'My marks';
+if (PUBLIC) document.getElementById('marksTitle').textContent = 'My marks (tap a dot, then a button)';
 const pubBtn = document.getElementById('publish');
 pubBtn.addEventListener('click', async () => {
   const n = Object.keys(marks).length, note = document.getElementById('pubNote');
@@ -753,6 +1023,7 @@ pubBtn.addEventListener('click', async () => {
 refresh();
 loadMarks().then(async () => {
   refresh(); updateMarkCounts();
+  if (SYNC_ON) syncKick();      // send what is left in the outbox from an earlier visit
   if (saveMode === 'server') {
     try {
       const r = await fetch('/api/usage', { headers: { 'X-Marks': '1' } });
